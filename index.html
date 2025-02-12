@@ -542,6 +542,7 @@
   <!-- Scripts JavaScript -->
   <!-- ================================ -->
   <script>
+
  lucide.createIcons();
 
   // Variável para armazenar inscrições da sessão e a última inscrição realizada
@@ -623,44 +624,135 @@
     }
   }
 
-  // Trata o upload do comprovante e finaliza a inscrição
-  function handleProofUpload(event) {
-    if (event.target.files?.[0]) {
-      closePaymentModal();
-      // Coleta os dados do formulário
-      const formData = {
-        name: document.getElementById('name').value,
-        congregation: document.getElementById('congregation').value,
-        group: document.getElementById('group').value,
-        field: document.getElementById('field').value,
-        phone: document.getElementById('phone').value,
-        date: new Date().toLocaleString()
-      };
-      // Armazena a inscrição tanto no array local quanto no localStorage
-      registrations.push(formData);
-      lastRegistration = formData;  // Guarda a última inscrição para o download do comprovante
-      let allRegistrations = [];
-      const existingData = localStorage.getItem('registrations');
-      if (existingData) {
-        allRegistrations = JSON.parse(existingData);
+  // --- Alterações Necessárias na Validação do Comprovante ---
+
+  // Função para processar o comprovante com Tesseract.js
+  async function validateProof(file) {
+    const resultadoValidacao = document.getElementById('resultadoValidacao');
+    const mensagemValidacao = document.getElementById('mensagemValidacao');
+
+    // Exibe uma mensagem de carregamento
+    mensagemValidacao.textContent = 'Processando comprovante...';
+    resultadoValidacao.classList.remove('hidden');
+
+    try {
+      // Usa o Tesseract.js para processar a imagem
+      const { data: { text } } = await Tesseract.recognize(
+        file,
+        'por+eng', // Utiliza Português + Inglês para maior precisão
+        { logger: m => console.log(m) }
+      );
+
+      console.log('Texto extraído:', text); // Apenas para depuração no console
+
+      // Removido o código que exibia o texto extraído na tela
+
+      // Função para normalizar o texto removendo espaços extras e convertendo para minúsculas
+      const normalizeText = str => str.replace(/\s+/g, ' ').trim().toLowerCase();
+
+      // Informações esperadas no comprovante
+      const expectedInfo = [
+        "Valor da transferência",
+        "R$ 14,06",
+        "Pix",
+        "Código da transação Pagbank",
+        "95cc9e30-a967-4a30-b5d6-99c14f2d4e74",
+        "Código da transação Pix",
+        "E0856170120250208215317658597235",
+        "BRUNO RIBEIRO DOS SANTOS",
+        "Felipe Cardoso Martins",
+        "PagBank",
+        "NU PAGAMENTOS"
+      ];
+
+      // Verifica se todas as informações esperadas estão presentes no texto extraído
+      const isValid = expectedInfo.every(info =>
+        normalizeText(text).includes(normalizeText(info))
+      );
+
+      if (isValid) {
+        mensagemValidacao.innerHTML = '<p style="color: #28a745;">Comprovante válido! Pagamento confirmado.</p>';
+        return true;
+      } else {
+        mensagemValidacao.innerHTML = '<p style="color: #dc3545;">Comprovante inválido. Verifique o arquivo enviado.</p>';
+        return false;
       }
-      allRegistrations.push(formData);
-      localStorage.setItem('registrations', JSON.stringify(allRegistrations));
-      // Atualiza o conteúdo do comprovante
-      generateReceipt(formData);
-      // Exibe o botão de download para o usuário
-      document.getElementById('downloadContainer').classList.remove('hidden');
-      Swal.fire({
-        icon: 'success',
-        title: 'Inscrição Confirmada!',
-        text: 'Clique no botão "Baixar Comprovante" para salvar seu comprovante.',
-        showConfirmButton: false,
-        timer: 3000,
-        timerProgressBar: true
-      });
-      document.getElementById('registrationForm').reset();
+    } catch (error) {
+      console.error('Erro ao processar a imagem:', error);
+      mensagemValidacao.innerHTML = '<p style="color: #dc3545;">Erro ao processar o comprovante. Tente novamente.</p>';
+      return false;
     }
   }
+
+  // Função para lidar com o upload do comprovante e confirmar a inscrição somente se o comprovante for válido
+  async function handleProofUpload(event) {
+    const file = event.target.files?.[0];
+    if (file) {
+      // Valida o tipo de arquivo (aceita apenas imagens)
+      if (!file.type.startsWith('image/')) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Arquivo inválido',
+          text: 'Por favor, envie uma imagem (JPG, PNG).',
+          confirmButtonColor: '#3B82F6'
+        });
+        return;
+      }
+      
+      // Processa o comprovante e aguarda a validação
+      const proofValid = await validateProof(file);
+      
+      // Se o comprovante for válido, confirma a inscrição
+      if (proofValid) {
+        closePaymentModal();
+        // Coleta os dados do formulário
+        const formData = {
+          name: document.getElementById('name').value,
+          congregation: document.getElementById('congregation').value,
+          group: document.getElementById('group').value,
+          field: document.getElementById('field').value,
+          phone: document.getElementById('phone').value,
+          date: new Date().toLocaleString()
+        };
+        // Armazena a inscrição tanto no array local quanto no localStorage
+        registrations.push(formData);
+        lastRegistration = formData;  // Guarda a última inscrição para o download do comprovante
+        let allRegistrations = [];
+        const existingData = localStorage.getItem('registrations');
+        if (existingData) {
+          allRegistrations = JSON.parse(existingData);
+        }
+        allRegistrations.push(formData);
+        localStorage.setItem('registrations', JSON.stringify(allRegistrations));
+        // Atualiza o conteúdo do comprovante
+        generateReceipt(formData);
+        // Exibe o botão de download para o usuário
+        document.getElementById('downloadContainer').classList.remove('hidden');
+        Swal.fire({
+          icon: 'success',
+          title: 'Inscrição Confirmada!',
+          text: 'Clique no botão "Baixar Comprovante" para salvar seu comprovante.',
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true
+        });
+        document.getElementById('registrationForm').reset();
+      } else {
+        // Se o comprovante não for válido, a inscrição não é confirmada.
+        Swal.fire({
+          icon: 'error',
+          title: 'Comprovante Inválido',
+          text: 'A inscrição não foi confirmada. Verifique o comprovante enviado.',
+          confirmButtonColor: '#dc3545'
+        });
+      }
+    }
+  }
+
+  // Adiciona o evento de upload do comprovante ao campo específico
+  document.getElementById('proofFile').addEventListener('change', handleProofUpload);
+
+  // --- Fim das Alterações na Validação do Comprovante ---
 
   // Função para gerar o PDF usando html2canvas e jsPDF
   async function generatePDF(data) {
@@ -686,7 +778,6 @@
   // Atualiza o conteúdo do comprovante com os dados informados
   function generateReceipt(data) {
     document.getElementById('receipt-name').textContent = data.name;
-    
     document.getElementById('receipt-congregation').textContent = data.congregation;
     document.getElementById('receipt-group').textContent = `Grupo ${data.group}`;
     document.getElementById('receipt-field').textContent = data.field;
@@ -742,211 +833,5 @@
     }
   });
 </script>
-
-
-<script>
-  // Área Administrativa
-  const ADMIN_USER = 'admin';
-  const ADMIN_PASS = 'admin';
-
-  document.getElementById('adminAccessBtn').addEventListener('click', function() {
-    document.getElementById('adminContainer').classList.remove('hidden');
-  });
-
-  document.getElementById('closeAdminBtn').addEventListener('click', function() {
-    document.getElementById('adminContainer').classList.add('hidden');
-    document.getElementById('loginDiv').classList.remove('hidden');
-    document.getElementById('adminPanel').classList.add('hidden');
-    document.getElementById('loginForm').reset();
-  });
-
-  document.getElementById('loginForm').addEventListener('submit', function(e) {
-    e.preventDefault();
-    const username = document.getElementById('username').value.trim();
-    const password = document.getElementById('password').value.trim();
-    if (username === ADMIN_USER && password === ADMIN_PASS) {
-      document.getElementById('loginDiv').classList.add('hidden');
-      document.getElementById('adminPanel').classList.remove('hidden');
-      loadRegistrations();
-    } else {
-      Swal.fire({
-        icon: 'error',
-        title: 'Acesso Negado',
-        text: 'Usuário ou senha incorretos!',
-        confirmButtonColor: '#3085d6'
-      });
-    }
-  });
-
-  function loadRegistrations() {
-    const registrationsData = localStorage.getItem('registrations');
-    let registrations = [];
-    if (registrationsData) {
-      registrations = JSON.parse(registrationsData);
-    }
-    const tableBody = document.getElementById('registrationsTable');
-    tableBody.innerHTML = '';
-    if (registrations.length === 0) {
-      tableBody.innerHTML = '<tr><td colspan="8" class="text-center py-4">Nenhuma inscrição encontrada.</td></tr>';
-    } else {
-      registrations.forEach((reg, index) => {
-        const row = document.createElement('tr');
-        row.innerHTML = `
-          <td class="py-2 px-4 border-b">${reg.name || ''}</td>
-          <td class="py-2 px-4 border-b">${reg.congregation || ''}</td>
-          <td class="py-2 px-4 border-b">${reg.group ? ('Grupo ' + reg.group) : ''}</td>
-          <td class="py-2 px-4 border-b">${reg.field || ''}</td>
-          <td class="py-2 px-4 border-b">${reg.phone || ''}</td>
-          <td class="py-2 px-4 border-b">${reg.date || ''}</td>
-          <td class="py-2 px-4 border-b">
-            <button class="bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-600" onclick="downloadReceipt(${index})">
-              Baixar Comprovante
-            </button>
-          </td>
-        `;
-        tableBody.appendChild(row);
-      });
-    }
-  }
-
-  document.getElementById('logoutBtn').addEventListener('click', function() {
-    document.getElementById('adminPanel').classList.add('hidden');
-    document.getElementById('loginDiv').classList.remove('hidden');
-    document.getElementById('loginForm').reset();
-  });
-
-  document.getElementById('exportBtn').addEventListener('click', function() {
-    const registrationsData = localStorage.getItem('registrations');
-    let registrations = [];
-    if (registrationsData) {
-      registrations = JSON.parse(registrationsData);
-    }
-    if (registrations.length === 0) {
-      Swal.fire({
-        icon: 'warning',
-        title: 'Sem Inscrições',
-        text: 'Nenhuma inscrição foi encontrada para exportação.',
-        confirmButtonColor: '#3085d6'
-      });
-      return;
-    }
-    const ws = XLSX.utils.json_to_sheet(registrations);
-    const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, "Inscrições");
-    XLSX.writeFile(wb, "inscricoes_simposio_ebd_2025.xlsx");
-  });
-
-  document.getElementById('clearBtn').addEventListener('click', function() {
-    Swal.fire({
-      title: 'Tem certeza?',
-      text: "Isso irá apagar todas as inscrições!",
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#d33',
-      cancelButtonColor: '#3085d6',
-      confirmButtonText: 'Sim, apagar!',
-      cancelButtonText: 'Cancelar'
-    }).then((result) => {
-      if (result.isConfirmed) {
-        localStorage.removeItem('registrations');
-        loadRegistrations();
-        Swal.fire({
-          icon: 'success',
-          title: 'Inscrições apagadas!',
-          text: 'Todas as inscrições foram removidas.',
-          timer: 2000,
-          showConfirmButton: false
-        });
-      }
-    });
-  });
-
-  function downloadReceipt(index) {
-    const registrationsData = localStorage.getItem('registrations');
-    let registrations = [];
-    if (registrationsData) {
-      registrations = JSON.parse(registrationsData);
-    }
-    const data = registrations[index];
-    if (data) {
-      generatePDF(data);
-    }
-  }
-  // Função para processar o comprovante com Tesseract.js
-async function validateProof(file) {
-    const resultadoValidacao = document.getElementById('resultadoValidacao');
-    const mensagemValidacao = document.getElementById('mensagemValidacao');
-
-    // Exibe uma mensagem de carregamento
-    mensagemValidacao.textContent = 'Processando comprovante...';
-    resultadoValidacao.classList.remove('hidden');
-
-    try {
-        // Usa o Tesseract.js para processar a imagem
-        const { data: { text } } = await Tesseract.recognize(
-            file,
-            'por', // Idioma: português
-            {
-                logger: m => console.log(m), // Opcional: exibe logs no console
-            }
-        );
-
-        console.log('Texto extraído:', text); // Exibe o texto extraído no console
-
-        // Informações esperadas no comprovante
-        const expectedInfo = [
-            "Valor da transferência",
-            "R$ 14,06",
-            "Pix",
-            "Código da transação Pagbank",
-            "95cc9e30-a967-4a30-b5d6-99c14f2d4e74",
-            "Código da transação Pix",
-            "E0856170120250208215317658597235",
-            "BRUNO RIBEIRO DOS SANTOS",
-            "Felipe Cardoso Martins",
-            "PagBank",
-            "NU PAGAMENTOS"
-        ];
-
-        // Verifica se todas as informações esperadas estão presentes no texto extraído
-        const isValid = expectedInfo.every(info => text.includes(info));
-
-        if (isValid) {
-            mensagemValidacao.textContent = 'Comprovante válido! Pagamento confirmado.';
-            mensagemValidacao.style.color = '#28a745';
-        } else {
-            mensagemValidacao.textContent = 'Comprovante inválido. Verifique o arquivo enviado.';
-            mensagemValidacao.style.color = '#dc3545';
-        }
-    } catch (error) {
-        console.error('Erro ao processar a imagem:', error);
-        mensagemValidacao.textContent = 'Erro ao processar o comprovante. Tente novamente.';
-        mensagemValidacao.style.color = '#dc3545';
-    }
-}
-
-// Função para lidar com o upload do comprovante
-function handleProofUpload(event) {
-    const file = event.target.files?.[0];
-    if (file) {
-        // Valida o tipo de arquivo (aceita apenas imagens)
-        if (!file.type.startsWith('image/')) {
-            Swal.fire({
-                icon: 'error',
-                title: 'Arquivo inválido',
-                text: 'Por favor, envie uma imagem (JPG, PNG).',
-                confirmButtonColor: '#3B82F6'
-            });
-            return;
-        }
-
-        // Processa o comprovante
-        validateProof(file);
-    }
-}
-
-// Adiciona o evento de upload ao campo de comprovante
-document.getElementById('proofFile').addEventListener('change', handleProofUpload);
-  </script>
 </body>
 </html>
