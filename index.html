@@ -734,108 +734,105 @@
 
   // Função para lidar com o upload do comprovante e confirmar a inscrição somente se for válido
   // Nesta versão, se o comprovante for aprovado, a inscrição é confirmada sem fazer o upload do arquivo.
-  async function handleProofUpload(event) {
+  // Confirma a inscrição apenas após validar o comprovante
+async function handleProofUpload(event) {
     const file = event.target.files?.[0];
     if (file) {
-      // Valida o tipo de arquivo (apenas imagens)
-      if (!file.type.startsWith('image/')) {
-        Swal.fire({
-          icon: 'error',
-          title: 'Arquivo inválido',
-          text: 'Por favor, envie uma imagem (JPG, PNG).',
-          confirmButtonColor: '#3B82F6'
-        });
-        return;
-      }
-      
-      // Aguarda a validação do comprovante com Tesseract.js
-      const proofValid = await validateProof(file);
-      
-      if (proofValid) {
-        // Se o comprovante for aprovado, confirma a inscrição imediatamente
-        closePaymentModal();
-        const formDataObj = {
-          name: document.getElementById('name').value,
-          congregation: document.getElementById('congregation').value,
-          group: document.getElementById('group').value,
-          field: document.getElementById('field').value,
-          phone: document.getElementById('phone').value,
-          date: new Date().toLocaleString(),
-          comprovante: '' // Se desejar, pode salvar algum identificador do arquivo localmente
-        };
-        registrations.push(formDataObj);
-        lastRegistration = formDataObj;
-        let allRegistrations = [];
-        const existingData = localStorage.getItem('registrations');
-        if (existingData) {
-          allRegistrations = JSON.parse(existingData);
+        if (!file.type.startsWith('image/')) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Arquivo inválido',
+                text: 'Por favor, envie uma imagem (JPG, PNG).',
+                confirmButtonColor: '#3B82F6'
+            });
+            return;
         }
-        allRegistrations.push(formDataObj);
-        localStorage.setItem('registrations', JSON.stringify(allRegistrations));
-        generateReceipt(formDataObj);
-        document.getElementById('downloadContainer').classList.remove('hidden');
-        Swal.fire({
-          icon: 'success',
-          title: 'Inscrição Confirmada!',
-          text: 'Inscrição confirmada, comprovante aprovado.',
-          showConfirmButton: false,
-          timer: 3000,
-          timerProgressBar: true
-        });
-        document.getElementById('registrationForm').reset();
-      } else {
-        // Se o comprovante não for válido, a inscrição não é confirmada.
-        Swal.fire({
-          icon: 'error',
-          title: 'Comprovante Inválido',
-          text: 'A inscrição não foi confirmada. Verifique o comprovante enviado.',
-          confirmButtonColor: '#dc3545'
-        });
-      }
+        
+        const proofValid = await validateProof(file);
+        
+        if (proofValid) {
+            closePaymentModal();
+
+            const formDataObj = {
+                name: document.getElementById('name').value,
+                congregation: document.getElementById('congregation').value,
+                group: document.getElementById('group').value,
+                field: document.getElementById('field').value,
+                phone: document.getElementById('phone').value,
+                date: new Date().toLocaleString()
+            };
+
+            registrations.push(formDataObj);
+            lastRegistration = formDataObj;
+
+            let allRegistrations = JSON.parse(localStorage.getItem('registrations')) || [];
+            allRegistrations.push(formDataObj);
+            localStorage.setItem('registrations', JSON.stringify(allRegistrations));
+
+            // Exibe o botão de download do comprovante sem chamar `generateReceipt()` aqui
+            document.getElementById('downloadContainer').classList.remove('hidden');
+
+            Swal.fire({
+                icon: 'success',
+                title: 'Inscrição Confirmada!',
+                text: 'Inscrição confirmada, comprovante aprovado.',
+                showConfirmButton: false,
+                timer: 1000,
+                timerProgressBar: true
+            });
+
+            document.getElementById('registrationForm').reset();
+        } else {
+            Swal.fire({
+                icon: 'error',
+                title: 'Comprovante Inválido',
+                text: 'A inscrição não foi confirmada. Verifique o comprovante enviado.',
+                confirmButtonColor: '#dc3545'
+            });
+        }
     }
-  }
+}
 
-  // Evento para upload do comprovante
-  document.getElementById('proofFile').addEventListener('change', handleProofUpload);
-
-  // -------------------------------------------------------------------
-  // Função para gerar o PDF usando html2canvas e jsPDF
-  async function generatePDF(data) {
+// Função que gera o PDF e evita duplicações
+async function generatePDF(data) {
+    // Atualiza apenas se o recibo ainda não foi preenchido corretamente
     generateReceipt(data);
+
     const receipt = document.getElementById('receipt');
     receipt.style.display = 'block';
+
     try {
-      const canvas = await html2canvas(receipt, { scale: 2 });
-      const imgData = canvas.toDataURL('image/png');
-      const { jsPDF } = window.jspdf;
-      const pdf = new jsPDF('p', 'mm', 'a4');
-      const imgWidth = 190;
-      const imgHeight = (canvas.height * imgWidth) / canvas.width;
-      pdf.addImage(imgData, 'PNG', 10, 10, imgWidth, imgHeight);
-      const fileName = `comprovante_${data.name.replace(/\s+/g, '_')}.pdf`;
-      pdf.save(fileName);
+        const canvas = await html2canvas(receipt, { scale: 2 });
+        const imgData = canvas.toDataURL('image/png');
+        const { jsPDF } = window.jspdf;
+        const pdf = new jsPDF('p', 'mm', 'a4');
+        const imgWidth = 190;
+        const imgHeight = (canvas.height * imgWidth) / canvas.width;
+        pdf.addImage(imgData, 'PNG', 10, 10, imgWidth, imgHeight);
+        pdf.save(`comprovante_${data.name.replace(/\s+/g, '_')}.pdf`);
     } catch (error) {
-      console.error('Erro ao gerar PDF:', error);
+        console.error('Erro ao gerar PDF:', error);
     }
+
     receipt.style.display = 'none';
-  }
+}
 
-  // Atualiza o conteúdo do comprovante (caso queira exibir dados na área do recibo)
-  function generateReceipt(data) {
-    document.getElementById('receipt-name').textContent = data.name;
-    document.getElementById('receipt-congregation').textContent = data.congregation;
-    document.getElementById('receipt-group').textContent = `Grupo ${data.group}`;
-    document.getElementById('receipt-field').textContent = data.field;
-    document.getElementById('receipt-phone').textContent = data.phone;
-    document.getElementById('receipt-date').textContent = data.date;
-  }
+// Atualiza os dados do comprovante corretamente
+function generateReceipt(data) {
+    document.getElementById('receipt-name').textContent = data.name || '';
+    document.getElementById('receipt-congregation').textContent = data.congregation || '';
+    document.getElementById('receipt-group').textContent = `Grupo ${data.group || ''}`;
+    document.getElementById('receipt-field').textContent = data.field || '';
+    document.getElementById('receipt-phone').textContent = data.phone || '';
+    document.getElementById('receipt-date').textContent = data.date || '';
+}
 
-  // Configura o botão para download do comprovante
-  document.getElementById('downloadReceiptBtn').addEventListener('click', function() {
+// Botão de download chama `generatePDF()` apenas uma vez
+document.getElementById('downloadReceiptBtn').addEventListener('click', function() {
     if (lastRegistration) {
-      generatePDF(lastRegistration);
+        generatePDF(lastRegistration);
     }
-  });
+});
 
   // --- Área Administrativa ---
   const ADMIN_USER = 'admin';
