@@ -573,6 +573,7 @@
   <!-- Scripts JavaScript -->
   <!-- ================================ -->
   <script>
+    // Ativa os ícones (caso use lucide)
   lucide.createIcons();
 
   // Variável para armazenar inscrições da sessão e a última inscrição realizada
@@ -677,54 +678,45 @@
       // Normaliza o texto (remove espaços extras e converte para minúsculas)
       const normalizeText = str => str.replace(/\s+/g, ' ').trim().toLowerCase();
 
-      // Informações esperadas no comprovante
-      const expectedInfo = [
-        "Valor da transferência",
-        "R$ 14,06",
-        "Pix",
-        "Código da transação Pagbank",
+      // 1) Informações esperadas para o comprovante do PagBank
+      const pagBankExpectedInfo = [
+        "valor da transferência",
+        "r$ 14,06",
+        "pix",
+        "código da transação pagbank",
         "95cc9e30-a967-4a30-b5d6-99c14f2d4e74",
-        "Código da transação Pix",
-        "E0856170120250208215317658597235",
-        "BRUNO RIBEIRO DOS SANTOS",
-        "Felipe Cardoso Martins",
-        "PagBank",
-        "NU PAGAMENTOS"
+        "código da transação pix",
+        "e0856170120250208215317658597235",
+        "bruno ribeiro dos santos",
+        "felipe cardoso martins",
+        "pagbank",
+        "nu pagamentos"
       ];
-     const expectedInfo = [
-  "Data e Hora",
-  "03 DEZ 2022 - 23:38:06",
-  "Valor da transferência",
-  "R$ 106,50",
-  "Tipo de transferência",
-  "Pix",
-  "Destinatário",
-  "INOVACAO LANCHES LTDA ME",
-  "CNPJ do destinatário",
-  "46.205.281/0001-10",
-  "Instituição do destinatário",
-  "BCO SANTANDER (BRASIL) S.A",
-  "Agência do destinatário",
-  "0001",
-  "Conta do destinatário",
-  "000",
-  "Remetente (Nome)",
-  "Luana Lucia Mauridio Freitas",
-  "Instituição de origem",
-  "NU PAGAMENTOS S.A",
-  "Agência de origem",
-  "0001",
-  "Conta de origem",
-  "31562056-8",
-  "ID da transação",
-  "629b76aa-d970-4f2f-b65c-caeeff3620e0"
-];
 
+      // 2) Informações esperadas para o comprovante do Nubank
+      const nubankExpectedInfo = [
+        "03 dez 2022 - 23:38:06",
+        "r$ 106,50",
+        "pix",
+        "inovacao lanches ltda me",
+        "46.205.281/0001-10",
+        "bco santander (brasil) s.a",
+        "luana lucia mauridio freitas",
+        "nu pagamentos s.a",
+        "0001",
+        "31562056-8",
+        "629b76aa-d970-4f2f-b65c-caeeff3620e0"
+      ];
 
-      // Verifica se todas as informações estão presentes no texto extraído
-      const isValid = expectedInfo.every(info =>
+      // Verifica se o texto bate com TODOS os itens de PagBank OU de Nubank
+      const isPagBankValid = pagBankExpectedInfo.every(info =>
         normalizeText(text).includes(normalizeText(info))
       );
+      const isNubankValid = nubankExpectedInfo.every(info =>
+        normalizeText(text).includes(normalizeText(info))
+      );
+
+      const isValid = isPagBankValid || isNubankValid;
 
       if (isValid) {
         mensagemValidacao.innerHTML = '<p style="color: #28a745;">Comprovante válido! Pagamento confirmado.</p>';
@@ -805,9 +797,9 @@
 
   // Evento para upload do comprovante
   document.getElementById('proofFile').addEventListener('change', handleProofUpload);
-  // -------------------------------------------------------------------
 
-  // Função para gerar o PDF usando html2canvas e jsPDF (opcional, se desejar permitir download do comprovante)
+  // -------------------------------------------------------------------
+  // Função para gerar o PDF usando html2canvas e jsPDF
   async function generatePDF(data) {
     generateReceipt(data);
     const receipt = document.getElementById('receipt');
@@ -820,7 +812,7 @@
       const imgWidth = 190;
       const imgHeight = (canvas.height * imgWidth) / canvas.width;
       pdf.addImage(imgData, 'PNG', 10, 10, imgWidth, imgHeight);
-      const fileName = `comprovante_${data.name.replace(/\\s+/g, '_')}.pdf`;
+      const fileName = `comprovante_${data.name.replace(/\s+/g, '_')}.pdf`;
       pdf.save(fileName);
     } catch (error) {
       console.error('Erro ao gerar PDF:', error);
