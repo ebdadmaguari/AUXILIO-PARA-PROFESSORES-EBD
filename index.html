@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -266,6 +267,20 @@
 
     #receipt .text-lg {
       font-size: 1rem; /* Reduz o tamanho do texto */
+    }
+    .map-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 60vh; /* Ajuste conforme necessário */
+    }
+      iframe {
+      width: 90%;
+      max-width: 600px;
+      height: 450px;
+      border: 0;
+      border-radius: 20px; /* Bordas arredondadas */
+      box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.2); /* Sombra suave */
     }
   
   </style>
@@ -540,6 +555,11 @@
         </div>
       </div>
     </div>
+  </div>
+
+   <div class="map-container">
+    <iframe src="https://www.google.com/maps/embed?pb=!1m16!1m12!1m3!1d15954.94732173058!2d-48.38337905643941!3d-1.3340807475124026!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!2m1!1stemplo%20central%20maguari!5e0!3m2!1spt-BR!2sbr!4v1739559309001!5m2!1spt-BR!2sbr" 
+      allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
   </div>
 
   <!-- ================================ -->
@@ -925,5 +945,9 @@
     }
   }
 </script>
+
 </body>
 </html>
+
+
+  
