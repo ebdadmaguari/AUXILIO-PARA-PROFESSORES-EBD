@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Página de Links</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            text-align: center;
+            background-color: #2c3e50;
+            color: #ecf0f1;
+        }
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #34495e;
+            border-radius: 10px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        h1, h2 {
+            color: #f1c40f;
+        }
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+        li {
+            margin: 10px 0;
+        }
+        a {
+            display: block;
+            padding: 10px;
+            background-color: #2980b9;
+            color: #fff;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+        a:hover {
+            background-color: #1abc9c;
+        }
+        .qrcode-container {
+            margin-top: 20px;
+            padding: 10px;
+            background: #2c3e50;
+            border-radius: 5px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .logo {
+            width: 100px;
+            margin-bottom: 15px;
+            border-radius: 50%;
+        }
+        .footer {
+            margin-top: 20px;
+            font-size: 14px;
+            color: #bdc3c7;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <img src="c:\Users\MIDIAN\Desktop\EBD 2024\Logos\IMG_20230124_205911_214.jpg" alt="Logo" class="logo">
+        <h1>Auxílio para Professores</h1>
+        <h2>Escola Bíblica Dominical</h2>
+        <h2>Links Disponíveis</h2>
+        <div>
+            <ul>
+                <li><a href="https://adaliahelena.blogspot.com/" target="_blank">📖 Blog Adalia Helena</a></li>
+                <li><a href="https://youtube.com/@tassiareisefamilia?si=CRYtE1k_7KaAsgo9" target="_blank">📺 YouTube - Tássia Reis e Família</a></li>
+                <li><a href="https://pin.it/1IYj0NwGk" target="_blank">📌 Pinterest</a></li>
+                <li><a href="https://youtube.com/@jandersonnascimento?si=CcjNiPQvsAGqjKVO" target="_blank">📺 YouTube - Janderson Nascimento</a></li>
+                <li><a href="https://youtube.com/@redebrasiloficial?si=9M9JLK30V2J0C-5s" target="_blank">📺 YouTube - Rede Brasil Oficial</a></li>
+                <li><a href="https://youtube.com/@abraajaula?si=VXlYXry0-61UGA6F" target="_blank">📺 YouTube - Abra a Jaula</a></li>
+                <li><a href="https://www.pecadorconfesso.com/" target="_blank">🙏 Pecador Confesso</a></li>
+                <li><a href="https://escolabiblicadominical.org/licoes-biblicas-adultos/" target="_blank">📚 Lições Bíblicas - Escola Dominical</a></li>
+            </ul>
+        </div>
+        
+        <div class="qrcode-container">
+            <h2>📢 Compartilhe esta página</h2>
+            <div id="qrcode"></div>
+        </div>
+        
+        <div class="footer">
+            <p>Este site foi desenvolvido por Bruno dos Santos</p>
+        </div>
+    </div>
+
+    <script>
+        const currentURL = window.location.href;
+        new QRCode(document.getElementById("qrcode"), currentURL);
+    </script>
+</body>
+</html>
