@@ -299,96 +299,126 @@ h4 {
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-        const currentURL = window.location.href;
-        new QRCode(document.getElementById("qrcode"), {
-            text: currentURL,
-            width: 128,
-            height: 128,
-            colorDark: "#000000",
-            colorLight: "#ffffff",
-            correctLevel: QRCode.CorrectLevel.H
-        });
-
-        if (sessionStorage.getItem("isAdmin") === "true") {
-            mostrarAreaAdmin();
+  document.addEventListener('DOMContentLoaded', function () {
+    // Verifica cookie de nome do usuário
+    let usuario = getCookie("usuario");
+    if (usuario != "") {
+        console.log("Bem-vindo de volta, " + usuario);
+    } else {
+        usuario = prompt("Qual o seu nome?");
+        if (usuario != "" && usuario != null) {
+            setCookie("usuario", usuario, 7);
+            console.log("Nome salvo no cookie:", usuario);
         }
+    }
 
-        // Carregar links do localStorage
-        carregarLinksSalvos();
+    const currentURL = window.location.href;
+    new QRCode(document.getElementById("qrcode"), {
+        text: currentURL,
+        width: 128,
+        height: 128,
+        colorDark: "#000000",
+        colorLight: "#ffffff",
+        correctLevel: QRCode.CorrectLevel.H
     });
 
-    function fazerLogin() {
-        const senha = document.getElementById("senhaAdmin").value;
-        if (senha === "ebd1234") {
-            sessionStorage.setItem("isAdmin", "true");
-            mostrarAreaAdmin();
-        } else {
-            alert("Senha incorreta.");
+    if (sessionStorage.getItem("isAdmin") === "true") {
+        mostrarAreaAdmin();
+    }
+
+    carregarLinksSalvos();
+});
+
+// Funções de cookie
+function setCookie(nome, valor, dias) {
+    const data = new Date();
+    data.setTime(data.getTime() + (dias * 24 * 60 * 60 * 1000));
+    const expira = "expires=" + data.toUTCString();
+    document.cookie = nome + "=" + valor + ";" + expira + ";path=/";
+}
+
+function getCookie(nome) {
+    const nomeBusca = nome + "=";
+    const cookies = document.cookie.split(';');
+    for (let i = 0; i < cookies.length; i++) {
+        let c = cookies[i].trim();
+        if (c.indexOf(nomeBusca) == 0) {
+            return c.substring(nomeBusca.length, c.length);
         }
     }
+    return "";
+}
 
-    function mostrarAreaAdmin() {
-        document.getElementById("adminArea").style.display = "block";
-        document.getElementById("loginArea").style.display = "none";
+function fazerLogin() {
+    const senha = document.getElementById("senhaAdmin").value;
+    if (senha === "ebd1234") {
+        sessionStorage.setItem("isAdmin", "true");
+        mostrarAreaAdmin();
+    } else {
+        alert("Senha incorreta.");
+    }
+}
+
+function mostrarAreaAdmin() {
+    document.getElementById("adminArea").style.display = "block";
+    document.getElementById("loginArea").style.display = "none";
+}
+
+function adicionarLink() {
+    const url = document.getElementById("novoLink").value.trim();
+    if (!url) return alert("Informe um link válido.");
+
+    const links = JSON.parse(localStorage.getItem("linksEBD")) || [];
+    links.push(url);
+    localStorage.setItem("linksEBD", JSON.stringify(links));
+
+    renderizarLink(url);
+    document.getElementById("novoLink").value = "";
+}
+
+function carregarLinksSalvos() {
+    const links = JSON.parse(localStorage.getItem("linksEBD")) || [];
+    links.forEach(link => renderizarLink(link));
+}
+
+function renderizarLink(url) {
+    const lista = document.querySelector(".links-grid");
+    const item = document.createElement("li");
+    item.className = "link-item";
+
+    if (url.includes("youtube.com") || url.includes("youtu.be")) {
+        const videoId = extrairVideoId(url);
+        item.innerHTML = `
+            <a href="${url}" target="_blank">
+                <span class="icon">📺</span>
+                YouTube (Novo)
+            </a>
+            <div class="youtube-preview">
+                <iframe src="https://www.youtube.com/embed/${videoId}" allowfullscreen></iframe>
+            </div>
+        `;
+    } else {
+        item.innerHTML = `
+            <a href="${url}" target="_blank">
+                <span class="icon">🔗</span>
+                Link Externo (Novo)
+            </a>
+        `;
     }
 
-    function adicionarLink() {
-        const url = document.getElementById("novoLink").value.trim();
-        if (!url) return alert("Informe um link válido.");
+    lista.appendChild(item);
+}
 
-        // Salvar no localStorage
-        const links = JSON.parse(localStorage.getItem("linksEBD")) || [];
-        links.push(url);
-        localStorage.setItem("linksEBD", JSON.stringify(links));
-
-        renderizarLink(url);
-        document.getElementById("novoLink").value = "";
+function extrairVideoId(url) {
+    let id = '';
+    if (url.includes("youtu.be")) {
+        id = url.split("youtu.be/")[1].split("?")[0];
+    } else {
+        const params = new URLSearchParams(new URL(url).search);
+        id = params.get("v");
     }
-
-    function carregarLinksSalvos() {
-        const links = JSON.parse(localStorage.getItem("linksEBD")) || [];
-        links.forEach(link => renderizarLink(link));
-    }
-
-    function renderizarLink(url) {
-        const lista = document.querySelector(".links-grid");
-        const item = document.createElement("li");
-        item.className = "link-item";
-
-        if (url.includes("youtube.com") || url.includes("youtu.be")) {
-            const videoId = extrairVideoId(url);
-            item.innerHTML = `
-                <a href="${url}" target="_blank">
-                    <span class="icon">📺</span>
-                    YouTube (Novo)
-                </a>
-                <div class="youtube-preview">
-                    <iframe src="https://www.youtube.com/embed/${videoId}" allowfullscreen></iframe>
-                </div>
-            `;
-        } else {
-            item.innerHTML = `
-                <a href="${url}" target="_blank">
-                    <span class="icon">🔗</span>
-                    Link Externo (Novo)
-                </a>
-            `;
-        }
-
-        lista.appendChild(item);
-    }
-
-    function extrairVideoId(url) {
-        let id = '';
-        if (url.includes("youtu.be")) {
-            id = url.split("youtu.be/")[1].split("?")[0];
-        } else {
-            const params = new URLSearchParams(new URL(url).search);
-            id = params.get("v");
-        }
-        return id;
-    }
+    return id;
+}
     </script>
 </body>
 </html>
