@@ -292,7 +292,13 @@ h4 {
             <h2>📢 Compartilhe esta página</h2>
             <div id="qrcode"></div>
         </div>
-        
+        <div id="termoPrivacidade" style="display:none; position: fixed; bottom: 0; left: 0; right: 0; background: white; border-top: 1px solid #ccc; padding: 15px; z-index: 1000; text-align: center;">
+    <p>
+        Este site utiliza cookies para melhorar sua experiência. Ao continuar navegando, você concorda com nossa 
+        <a href="#" target="_blank">Política de Privacidade</a>.
+    </p>
+    <button onclick="aceitarTermo()">Aceitar</button>
+</div>
         <div class="footer">
             <p>Este site foi desenvolvido por Bruno dos Santos</p>
         </div>
@@ -311,7 +317,13 @@ h4 {
             console.log("Nome salvo no cookie:", usuario);
         }
     }
-
+      if (getCookie("aceitouTermo") !== "true") {
+    document.getElementById("termoPrivacidade").style.display = "block";
+}
+function aceitarTermo() {
+    setCookie("aceitouTermo", "true", 365);
+    document.getElementById("termoPrivacidade").style.display = "none";
+}
     const currentURL = window.location.href;
     new QRCode(document.getElementById("qrcode"), {
         text: currentURL,
