@@ -346,131 +346,240 @@ h4 {
     </div>
 
     <script>
-  document.addEventListener('DOMContentLoaded', function () {
-    // Verifica cookie de nome do usuário
-    let usuario = getCookie("usuario");
-    if (usuario != "") {
-        console.log("Bem-vindo de volta, " + usuario);
-    } else {
-        usuario = prompt("Qual o seu nome?");
-        if (usuario != "" && usuario != null) {
-            setCookie("usuario", usuario, 7);
-            console.log("Nome salvo no cookie:", usuario);
-        }
-    }
-      if (getCookie("aceitouTermo") !== "true") {
-    document.getElementById("termoPrivacidade").style.display = "block";
-}
-function aceitarTermo() {
-    setCookie("aceitouTermo", "true", 365);
-    document.getElementById("termoPrivacidade").style.display = "none";
-}
-    const currentURL = window.location.href;
-    new QRCode(document.getElementById("qrcode"), {
-        text: currentURL,
-        width: 128,
-        height: 128,
-        colorDark: "#000000",
-        colorLight: "#ffffff",
-        correctLevel: QRCode.CorrectLevel.H
-    });
-
-    if (sessionStorage.getItem("isAdmin") === "true") {
-        mostrarAreaAdmin();
-    }
-
-    carregarLinksSalvos();
+// Main application code
+document.addEventListener('DOMContentLoaded', function() {
+  // ----- Initialize all components -----
+  initUserWelcome();
+  initPrivacyTerms();
+  generateQRCode();
+  setupAdminArea();
+  carregarLinksSalvos();
 });
 
-// Funções de cookie
-function setCookie(nome, valor, dias) {
-    const data = new Date();
-    data.setTime(data.getTime() + (dias * 24 * 60 * 60 * 1000));
-    const expira = "expires=" + data.toUTCString();
-    document.cookie = nome + "=" + valor + ";" + expira + ";path=/";
+// ----- User Welcome Functions -----
+
+function initUserWelcome() {
+  // Get welcome user element
+  const welcomeUserElement = document.getElementById("welcomeUser");
+  if (!welcomeUserElement) return;
+  
+  // Check if user has a name cookie
+  let usuario = getCookie("usuario");
+  
+  if (usuario) {
+    // Display welcome message if user name exists
+    welcomeUserElement.textContent = `Bem-vindo(a), ${usuario}!`;
+    console.log("Bem-vindo de volta, " + usuario);
+  } else {
+    // Prompt for user name if not saved
+    usuario = prompt("Qual o seu nome?");
+    if (usuario && usuario.trim() !== "") {
+      // Save user name to cookie and display welcome message
+      setCookie("usuario", usuario, 7);
+      welcomeUserElement.textContent = `Bem-vindo(a), ${usuario}!`;
+      console.log("Nome salvo no cookie:", usuario);
+    }
+  }
 }
 
-function getCookie(nome) {
-    const nomeBusca = nome + "=";
-    const cookies = document.cookie.split(';');
-    for (let i = 0; i < cookies.length; i++) {
-        let c = cookies[i].trim();
-        if (c.indexOf(nomeBusca) == 0) {
-            return c.substring(nomeBusca.length, c.length);
-        }
+// ----- Privacy Terms Functions -----
+
+function initPrivacyTerms() {
+  // Check if user has already accepted the terms
+  const aceitouTermo = getCookie("aceitouTermo");
+  
+  if (aceitouTermo !== "true") {
+    // Show privacy terms modal if not accepted
+    const termoPrivacidade = document.getElementById("termoPrivacidade");
+    if (termoPrivacidade) {
+      termoPrivacidade.style.display = "flex";
     }
-    return "";
+  }
+  
+  // Add event listener to the "Accept" button
+  const aceitarTermoBtn = document.getElementById("aceitarTermoBtn");
+  if (aceitarTermoBtn) {
+    aceitarTermoBtn.addEventListener("click", aceitarTermo);
+  }
+}
+
+function aceitarTermo() {
+  setCookie("aceitouTermo", "true", 365);
+  const termoPrivacidade = document.getElementById("termoPrivacidade");
+  if (termoPrivacidade) {
+    termoPrivacidade.style.display = "none";
+  }
+}
+
+// ----- QR Code Functions -----
+
+function generateQRCode() {
+  // Ensure QRCode library is available
+  if (typeof QRCode === 'undefined') {
+    console.error('QRCode library not available');
+    return;
+  }
+  
+  // Get the QR code container element
+  const qrcodeElement = document.getElementById('qrcode');
+  if (!qrcodeElement) {
+    console.error('QR code container element not found');
+    return;
+  }
+  
+  // Clear any existing content
+  qrcodeElement.innerHTML = '';
+  
+  // Generate QR code with current URL
+  const currentURL = window.location.href;
+  try {
+    new QRCode(qrcodeElement, {
+      text: currentURL,
+      width: 128,
+      height: 128,
+      colorDark: "#000000",
+      colorLight: "#ffffff",
+      correctLevel: QRCode.CorrectLevel.H
+    });
+  } catch (error) {
+    console.error('Error generating QR code:', error);
+  }
+}
+
+// ----- Admin Area Functions -----
+
+function setupAdminArea() {
+  const adminLoginBtn = document.getElementById('adminLoginBtn');
+  const loginSubmit = document.getElementById('loginSubmit');
+  const addLinkButton = document.getElementById('addLinkButton');
+  
+  // Check if admin is already logged in
+  if (sessionStorage.getItem("isAdmin") === "true") {
+    mostrarAreaAdmin();
+  }
+  
+  // Admin login button event listener
+  if (adminLoginBtn) {
+    adminLoginBtn.addEventListener('click', function() {
+      const loginArea = document.getElementById('loginArea');
+      if (loginArea) {
+        loginArea.style.display = 'block';
+      }
+    });
+  }
+  
+  // Login submit button event listener
+  if (loginSubmit) {
+    loginSubmit.addEventListener('click', fazerLogin);
+  }
+  
+  // Add link button event listener
+  if (addLinkButton) {
+    addLinkButton.addEventListener('click', adicionarLink);
+  }
 }
 
 function fazerLogin() {
-    const senha = document.getElementById("senhaAdmin").value;
-    if (senha === "ebd1234") {
-        sessionStorage.setItem("isAdmin", "true");
-        mostrarAreaAdmin();
-    } else {
-        alert("Senha incorreta.");
-    }
+  const senha = document.getElementById("senhaAdmin").value;
+  if (senha === "ebd1234") {
+    sessionStorage.setItem("isAdmin", "true");
+    mostrarAreaAdmin();
+  } else {
+    alert("Senha incorreta.");
+  }
 }
 
 function mostrarAreaAdmin() {
-    document.getElementById("adminArea").style.display = "block";
-    document.getElementById("loginArea").style.display = "none";
+  document.getElementById("adminArea").style.display = "block";
+  document.getElementById("loginArea").style.display = "none";
 }
 
+// ----- Link Management Functions -----
+
 function adicionarLink() {
-    const url = document.getElementById("novoLink").value.trim();
-    if (!url) return alert("Informe um link válido.");
+  const url = document.getElementById("novoLink").value.trim();
+  if (!url) return alert("Informe um link válido.");
 
-    const links = JSON.parse(localStorage.getItem("linksEBD")) || [];
-    links.push(url);
-    localStorage.setItem("linksEBD", JSON.stringify(links));
+  const links = JSON.parse(localStorage.getItem("linksEBD")) || [];
+  links.push(url);
+  localStorage.setItem("linksEBD", JSON.stringify(links));
 
-    renderizarLink(url);
-    document.getElementById("novoLink").value = "";
+  renderizarLink(url);
+  document.getElementById("novoLink").value = "";
 }
 
 function carregarLinksSalvos() {
-    const links = JSON.parse(localStorage.getItem("linksEBD")) || [];
-    links.forEach(link => renderizarLink(link));
+  const links = JSON.parse(localStorage.getItem("linksEBD")) || [];
+  links.forEach(link => renderizarLink(link));
 }
 
 function renderizarLink(url) {
-    const lista = document.querySelector(".links-grid");
-    const item = document.createElement("li");
-    item.className = "link-item";
+  const lista = document.querySelector(".links-grid");
+  if (!lista) return;
+  
+  const item = document.createElement("li");
+  item.className = "link-item animate-fadeIn";
 
-    if (url.includes("youtube.com") || url.includes("youtu.be")) {
-        const videoId = extrairVideoId(url);
-        item.innerHTML = `
-            <a href="${url}" target="_blank">
-                <span class="icon">📺</span>
-                YouTube (Novo)
-            </a>
-            <div class="youtube-preview">
-                <iframe src="https://www.youtube.com/embed/${videoId}" allowfullscreen></iframe>
-            </div>
-        `;
-    } else {
-        item.innerHTML = `
-            <a href="${url}" target="_blank">
-                <span class="icon">🔗</span>
-                Link Externo (Novo)
-            </a>
-        `;
-    }
+  if (url.includes("youtube.com") || url.includes("youtu.be")) {
+    const videoId = extrairVideoId(url);
+    item.innerHTML = `
+      <a href="${url}" target="_blank" rel="noopener noreferrer">
+        <span class="icon">📺</span>
+        YouTube (Novo)
+      </a>
+      <div class="youtube-preview">
+        <iframe src="https://www.youtube.com/embed/${videoId}" allowfullscreen></iframe>
+      </div>
+    `;
+  } else {
+    item.innerHTML = `
+      <a href="${url}" target="_blank" rel="noopener noreferrer">
+        <span class="icon">🔗</span>
+        Link Externo (Novo)
+      </a>
+    `;
+  }
 
-    lista.appendChild(item);
+  lista.appendChild(item);
 }
 
 function extrairVideoId(url) {
-    let id = '';
-    if (url.includes("youtu.be")) {
-        id = url.split("youtu.be/")[1].split("?")[0];
-    } else {
-        const params = new URLSearchParams(new URL(url).search);
-        id = params.get("v");
+  let id = '';
+  if (url.includes("youtu.be")) {
+    id = url.split("youtu.be/")[1].split("?")[0];
+  } else if (url.includes("youtube.com/watch")) {
+    const params = new URLSearchParams(new URL(url).search);
+    id = params.get("v");
+  } else if (url.includes("youtube.com/embed/")) {
+    id = url.split("youtube.com/embed/")[1].split("?")[0];
+  }
+  
+  return id || '';
+}
+
+// ----- Cookie Functions -----
+
+function setCookie(nome, valor, dias) {
+  const data = new Date();
+  data.setTime(data.getTime() + (dias * 24 * 60 * 60 * 1000));
+  const expira = "expires=" + data.toUTCString();
+  document.cookie = nome + "=" + valor + ";" + expira + ";path=/";
+}
+
+function getCookie(nome) {
+  const nomeBusca = nome + "=";
+  const cookies = document.cookie.split(';');
+  for (let i = 0; i < cookies.length; i++) {
+    let c = cookies[i].trim();
+    if (c.indexOf(nomeBusca) == 0) {
+      return c.substring(nomeBusca.length, c.length);
     }
-    return id;
+  }
+  return "";
+}
+
+function deleteCookie(nome) {
+  setCookie(nome, "", -1);
 }
     </script>
 </body>
