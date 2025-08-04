@@ -65,9 +65,13 @@ h2 {
 
 .links-grid {
     display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); /* era 300px, agora 350px */
     gap: 15px;
     margin: 30px 0;
+    justify-items: center; /* centraliza os vídeos */
 }
+
+
 
 .link-item {
     list-style: none;
@@ -312,30 +316,13 @@ h4 {
                   Pinterest
               </a>
           </li>
-            <li class="link-item">
-                <a href="https://ebdadmaguari.github.io/pagamento-simposio-ebd-2025/" target="_blank">
-                    <span class="icon">💳</span>
-                    Pagamento - Simpósio EBD 2025
-                </a>
-            </li>
-        </ul>
-        <div class="admin-area" id="adminArea" style="display: none;">
-          <h2> Adicionar Novo Link</h2>
-          <input type="text" id="novoLink" placeholder="Cole o link aqui">
-          <button onclick="adicionarLink()">Adicionar Link</button>
-      </div>
-      
-      <div class="login-area" id="loginArea">
-          <h2>🔐 Área do Administrador</h2>
-          <input type="password" id="senhaAdmin" placeholder="Digite a senha">
-          <button onclick="fazerLogin()">Entrar</button>
-      </div>
-      
-        
-        <div class="qrcode-container">
+         <div>    
+        <div id='ebd'class="qrcode-container">
             <h2>📢 Compartilhe esta página</h2>
             <div id="qrcode"></div>
+            <p>Este site foi desenvolvido por Bruno dos Santos</p>
         </div>
+    </div>
         <div id="termoPrivacidade" style="display:none; position: fixed; bottom: 0; left: 0; right: 0; background: white; border-top: 1px solid #ccc; padding: 15px; z-index: 1000; text-align: center;">
     <p>
         Este site utiliza cookies para melhorar sua experiência. Ao continuar navegando, você concorda com nossa 
@@ -343,10 +330,7 @@ h4 {
     </p>
     <button onclick="aceitarTermo()">Aceitar</button>
 </div>
-        <div class="footer">
-            <p>Este site foi desenvolvido por Bruno dos Santos</p>
-        </div>
-    </div>
+      
 
     <script>
 // Main application code
