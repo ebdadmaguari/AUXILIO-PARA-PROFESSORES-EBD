@@ -5,25 +5,42 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>EBD — Auxílio para Professores · AD Maguari</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,300&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,600;1,8..60,300;1,8..60,400&display=swap" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+  <!-- ══════════════════════════════════════
+       SUPABASE CONFIG — substitua aqui
+  ══════════════════════════════════════ -->
+  <script>
+    const SUPABASE_URL  = 'https://SEU_PROJETO.supabase.co';   // ← sua URL
+    const SUPABASE_KEY  = 'SUA_ANON_KEY_AQUI';                  // ← sua anon key
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
   <style>
+    /* ══════════════════════════════════
+       TOKENS
+    ══════════════════════════════════ */
     :root {
-      --gold: #C8A96E;
-      --gold-light: #E8D5A8;
-      --gold-dark: #8B6914;
-      --deep: #0D0D0D;
-      --dark: #151510;
-      --mid: #1E1D16;
-      --surface: #242318;
-      --border: rgba(200,169,110,0.18);
-      --text: #F0EAD6;
-      --text-muted: #A09070;
-      --red-accent: #8B2020;
+      --gold:        #C8A96E;
+      --gold-light:  #E8D5A8;
+      --gold-dark:   #8B6914;
+      --gold-glow:   rgba(200,169,110,0.18);
+      --deep:        #0B0B08;
+      --dark:        #131210;
+      --mid:         #1A1914;
+      --surface:     #211F18;
+      --surface-2:   #272520;
+      --border:      rgba(200,169,110,0.15);
+      --border-hover:rgba(200,169,110,0.38);
+      --text:        #EDE7D3;
+      --text-muted:  #968870;
+      --text-dim:    #6B6050;
+      --red:         #922424;
+      --green:       #2E7D4F;
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
     html { scroll-behavior: smooth; }
 
     body {
@@ -34,563 +51,872 @@
       overflow-x: hidden;
     }
 
-    /* ─── Background texture ─── */
+    /* ── ambient bg ── */
     body::before {
       content: '';
-      position: fixed;
-      inset: 0;
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
       background:
-        radial-gradient(ellipse 80% 60% at 50% 0%, rgba(200,169,110,0.07) 0%, transparent 70%),
-        radial-gradient(ellipse 40% 40% at 10% 80%, rgba(139,32,32,0.05) 0%, transparent 60%),
-        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='4'%3E%3Ccircle cx='1' cy='1' r='0.5' fill='rgba(200,169,110,0.08)'/%3E%3C/svg%3E");
-      pointer-events: none;
-      z-index: 0;
+        radial-gradient(ellipse 90% 55% at 50% -10%, rgba(200,169,110,0.09) 0%, transparent 65%),
+        radial-gradient(ellipse 50% 50% at 5%  85%,  rgba(139,32,32,0.06)  0%, transparent 55%),
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='4'%3E%3Ccircle cx='1' cy='1' r='0.45' fill='rgba(200,169,110,0.07)'/%3E%3C/svg%3E");
     }
 
-    /* ─── Header ─── */
+    /* ══════════════════════════════════
+       HEADER
+    ══════════════════════════════════ */
     header {
-      position: relative;
-      z-index: 10;
+      position: relative; z-index: 10;
       text-align: center;
-      padding: 60px 24px 48px;
+      padding: 64px 24px 52px;
       border-bottom: 1px solid var(--border);
     }
 
     .header-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      font-family: 'Source Serif 4', serif;
-      font-size: 11px;
-      font-weight: 300;
-      letter-spacing: 0.25em;
-      text-transform: uppercase;
-      color: var(--gold);
+      display: inline-flex; align-items: center; gap: 9px;
+      font-size: 10.5px; font-weight: 300; letter-spacing: 0.28em;
+      text-transform: uppercase; color: var(--gold);
       border: 1px solid var(--border);
-      padding: 6px 18px;
-      border-radius: 100px;
-      margin-bottom: 28px;
-      opacity: 0;
-      animation: fadeUp 0.8s 0.2s ease forwards;
+      padding: 6px 20px; border-radius: 100px; margin-bottom: 30px;
+      opacity: 0; animation: fadeUp 0.9s 0.1s ease forwards;
     }
-
-    .header-badge::before, .header-badge::after {
-      content: '✦';
-      font-size: 8px;
-      opacity: 0.6;
-    }
+    .header-badge::before, .header-badge::after { content: '✦'; font-size: 7px; opacity: 0.5; }
 
     .site-title {
       font-family: 'Playfair Display', Georgia, serif;
-      font-size: clamp(2.2rem, 6vw, 4rem);
-      font-weight: 900;
-      color: var(--gold);
-      line-height: 1.05;
-      letter-spacing: -0.02em;
-      opacity: 0;
-      animation: fadeUp 0.8s 0.4s ease forwards;
+      font-size: clamp(2.4rem, 6.5vw, 4.2rem);
+      font-weight: 900; color: var(--gold);
+      line-height: 1.04; letter-spacing: -0.025em;
+      opacity: 0; animation: fadeUp 0.9s 0.3s ease forwards;
     }
-
-    .site-title span {
-      display: block;
-      font-weight: 700;
-      font-size: 0.45em;
-      letter-spacing: 0.08em;
-      color: var(--text-muted);
-      margin-top: 8px;
-      font-style: italic;
+    .site-title em {
+      display: block; font-style: italic;
+      font-size: 0.42em; font-weight: 700;
+      letter-spacing: 0.07em; color: var(--text-muted); margin-top: 10px;
     }
 
     .header-divider {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 16px;
-      margin: 28px auto 0;
-      max-width: 320px;
-      opacity: 0;
-      animation: fadeUp 0.8s 0.6s ease forwards;
+      display: flex; align-items: center; justify-content: center;
+      gap: 16px; margin: 30px auto 0; max-width: 280px;
+      opacity: 0; animation: fadeUp 0.9s 0.5s ease forwards;
     }
-
     .header-divider::before, .header-divider::after {
-      content: '';
-      flex: 1;
-      height: 1px;
+      content: ''; flex: 1; height: 1px;
       background: linear-gradient(90deg, transparent, var(--gold-dark), transparent);
     }
+    .header-divider span { color: var(--gold); font-size: 13px; }
 
-    .header-divider span {
-      color: var(--gold);
-      font-size: 14px;
+    /* ══════════════════════════════════
+       NAV TABS
+    ══════════════════════════════════ */
+    .tab-nav {
+      position: sticky; top: 0; z-index: 50;
+      background: rgba(11,11,8,0.92); backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+      display: flex; justify-content: center; gap: 4px;
+      padding: 14px 24px;
+      opacity: 0; animation: fadeUp 0.7s 0.7s ease forwards;
     }
 
-    /* ─── Main layout ─── */
+    .tab-btn {
+      display: flex; align-items: center; gap: 7px;
+      padding: 9px 22px; border-radius: 100px;
+      border: 1px solid transparent;
+      background: transparent; color: var(--text-muted);
+      font-family: 'Source Serif 4', serif;
+      font-size: 0.82rem; font-weight: 600; letter-spacing: 0.07em;
+      text-transform: uppercase; cursor: pointer;
+      transition: all 0.25s ease;
+    }
+
+    .tab-btn:hover {
+      color: var(--gold-light);
+      border-color: var(--border);
+      background: var(--surface);
+    }
+
+    .tab-btn.active {
+      background: linear-gradient(135deg, var(--gold-dark), rgba(200,169,110,0.8));
+      color: var(--deep);
+      border-color: var(--gold-dark);
+      box-shadow: 0 0 20px rgba(200,169,110,0.2);
+    }
+
+    .tab-btn .tab-icon { font-size: 14px; }
+
+    /* ══════════════════════════════════
+       MAIN / PANELS
+    ══════════════════════════════════ */
     main {
-      position: relative;
-      z-index: 1;
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 56px 24px 80px;
+      position: relative; z-index: 1;
+      max-width: 1120px; margin: 0 auto;
+      padding: 60px 24px 100px;
     }
 
-    /* ─── Section titles ─── */
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; animation: fadeUp 0.5s ease; }
+
+    /* ══════════════════════════════════
+       SECTION HEADINGS
+    ══════════════════════════════════ */
     .section-heading {
       font-family: 'Playfair Display', serif;
-      font-size: 1.3rem;
-      font-weight: 700;
-      color: var(--gold);
-      letter-spacing: 0.04em;
+      font-size: 1.25rem; font-weight: 700;
+      color: var(--gold); letter-spacing: 0.04em;
       margin-bottom: 28px;
-      display: flex;
-      align-items: center;
-      gap: 14px;
+      display: flex; align-items: center; gap: 14px;
     }
-
     .section-heading::after {
-      content: '';
-      flex: 1;
-      height: 1px;
-      background: var(--border);
-      max-width: 200px;
+      content: ''; flex: 1; height: 1px;
+      background: var(--border); max-width: 260px;
     }
 
-    /* ─── Video grid ─── */
-    .video-section { margin-bottom: 64px; }
+    /* ══════════════════════════════════
+       VIDEO GRID
+    ══════════════════════════════════ */
+    .video-section { margin-bottom: 68px; }
 
     .video-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-      gap: 24px;
+      gap: 22px;
     }
 
     .video-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      overflow: hidden;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 14px; overflow: hidden;
       transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
-      opacity: 0;
-      animation: fadeUp 0.7s ease forwards;
+      opacity: 0; animation: fadeUp 0.7s ease forwards;
     }
-
-    .video-card:nth-child(1) { animation-delay: 0.1s; }
-    .video-card:nth-child(2) { animation-delay: 0.2s; }
-    .video-card:nth-child(3) { animation-delay: 0.3s; }
-    .video-card:nth-child(4) { animation-delay: 0.4s; }
+    .video-card:nth-child(1){animation-delay:.08s}
+    .video-card:nth-child(2){animation-delay:.18s}
+    .video-card:nth-child(3){animation-delay:.28s}
+    .video-card:nth-child(4){animation-delay:.38s}
 
     .video-card:hover {
-      transform: translateY(-4px);
+      transform: translateY(-5px);
       border-color: var(--gold-dark);
-      box-shadow: 0 16px 40px rgba(0,0,0,0.5), 0 0 0 1px rgba(200,169,110,0.15);
+      box-shadow: 0 20px 50px rgba(0,0,0,0.55), 0 0 0 1px rgba(200,169,110,0.12);
     }
 
     .video-label {
-      padding: 12px 16px 10px;
-      font-size: 11px;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: var(--gold);
-      font-weight: 600;
-      border-bottom: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      gap: 8px;
+      padding: 11px 16px 9px;
+      font-size: 10px; letter-spacing: 0.2em;
+      text-transform: uppercase; color: var(--gold);
+      font-weight: 600; border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; gap: 8px;
     }
+    .video-label::before { content: '▶'; font-size: 8px; }
 
-    .video-label::before { content: '▶'; font-size: 9px; }
-
-    .video-wrapper {
-      position: relative;
-      padding-top: 56.25%;
-    }
-
+    .video-wrapper { position: relative; padding-top: 56.25%; }
     .video-wrapper iframe {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      border: none;
+      position: absolute; inset: 0;
+      width: 100%; height: 100%; border: none;
     }
 
-    /* ─── Links grid ─── */
-    .links-section { margin-bottom: 64px; }
+    /* ══════════════════════════════════
+       LINKS GRID
+    ══════════════════════════════════ */
+    .links-section { margin-bottom: 68px; }
 
     .links-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-      gap: 14px;
-      list-style: none;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 13px; list-style: none;
     }
 
-    .link-card {
-      opacity: 0;
-      animation: fadeUp 0.6s ease forwards;
-    }
-
-    .link-card:nth-child(1) { animation-delay: 0.15s; }
-    .link-card:nth-child(2) { animation-delay: 0.25s; }
-    .link-card:nth-child(3) { animation-delay: 0.35s; }
+    .link-card { opacity: 0; animation: fadeUp 0.6s ease forwards; }
+    .link-card:nth-child(1){animation-delay:.1s}
+    .link-card:nth-child(2){animation-delay:.2s}
+    .link-card:nth-child(3){animation-delay:.3s}
+    .link-card:nth-child(4){animation-delay:.4s}
 
     .link-card a {
-      display: flex;
-      align-items: center;
-      gap: 14px;
+      display: flex; align-items: center; gap: 14px;
       padding: 18px 20px;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      color: var(--text);
-      text-decoration: none;
-      font-size: 0.95rem;
-      font-weight: 600;
-      letter-spacing: 0.01em;
-      transition: all 0.25s ease;
-      position: relative;
-      overflow: hidden;
+      background: var(--surface); border: 1px solid var(--border); border-radius: 11px;
+      color: var(--text); text-decoration: none;
+      font-size: 0.9rem; font-weight: 600; letter-spacing: 0.01em;
+      transition: all 0.25s ease; position: relative; overflow: hidden;
     }
-
     .link-card a::before {
-      content: '';
-      position: absolute;
-      left: 0; top: 0; bottom: 0;
-      width: 3px;
+      content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
       background: linear-gradient(180deg, var(--gold), var(--gold-dark));
-      transform: scaleY(0);
-      transition: transform 0.25s ease;
+      transform: scaleY(0); transition: transform 0.25s ease;
     }
-
     .link-card a:hover {
-      border-color: rgba(200,169,110,0.4);
-      background: rgba(36,35,24,0.9);
-      color: var(--gold-light);
-      transform: translateX(4px);
+      border-color: var(--border-hover); background: var(--surface-2);
+      color: var(--gold-light); transform: translateX(4px);
     }
-
     .link-card a:hover::before { transform: scaleY(1); }
 
-    .link-icon {
-      font-size: 20px;
-      flex-shrink: 0;
-      filter: grayscale(0.3);
-    }
-
+    .link-icon { font-size: 20px; flex-shrink: 0; }
     .link-text { flex: 1; }
-    .link-text strong { display: block; font-size: 0.88rem; }
-    .link-text small { font-size: 0.75rem; color: var(--text-muted); font-weight: 300; font-style: italic; }
-
-    .link-arrow {
-      color: var(--gold-dark);
-      font-size: 16px;
-      transition: transform 0.2s;
-    }
-
+    .link-text strong { display: block; font-size: 0.87rem; }
+    .link-text small { font-size: 0.74rem; color: var(--text-muted); font-style: italic; font-weight: 300; }
+    .link-arrow { color: var(--gold-dark); font-size: 15px; transition: transform 0.2s; }
     .link-card a:hover .link-arrow { transform: translateX(3px); }
 
-    /* ─── Share section ─── */
-    .share-section {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 40px;
-      text-align: center;
-      position: relative;
-      overflow: hidden;
+    /* ══════════════════════════════════
+       SHARE SECTION
+    ══════════════════════════════════ */
+    .share-box {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 18px; padding: 44px; text-align: center;
+      position: relative; overflow: hidden;
     }
-
-    .share-section::before {
-      content: '';
-      position: absolute;
-      top: -60px; left: 50%; transform: translateX(-50%);
-      width: 300px; height: 300px;
-      background: radial-gradient(circle, rgba(200,169,110,0.06) 0%, transparent 70%);
+    .share-box::before {
+      content: ''; position: absolute;
+      top: -80px; left: 50%; transform: translateX(-50%);
+      width: 340px; height: 340px;
+      background: radial-gradient(circle, rgba(200,169,110,0.07) 0%, transparent 70%);
       pointer-events: none;
     }
-
-    .share-section h2 {
+    .share-box h2 {
       font-family: 'Playfair Display', serif;
-      font-size: 1.5rem;
-      color: var(--gold);
-      margin-bottom: 8px;
+      font-size: 1.55rem; color: var(--gold); margin-bottom: 8px;
     }
-
-    .share-section p {
-      color: var(--text-muted);
-      font-size: 0.88rem;
-      font-style: italic;
-      margin-bottom: 28px;
-    }
-
+    .share-box p { color: var(--text-muted); font-size: 0.88rem; font-style: italic; margin-bottom: 28px; }
     #qrcode {
-      display: inline-block;
-      background: white;
-      padding: 14px;
-      border-radius: 10px;
-      box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+      display: inline-block; background: white;
+      padding: 14px; border-radius: 12px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.45);
     }
-
     .share-footer {
-      margin-top: 24px;
-      font-size: 0.8rem;
-      color: var(--text-muted);
-      letter-spacing: 0.06em;
+      margin-top: 24px; font-size: 0.79rem;
+      color: var(--text-muted); letter-spacing: 0.06em;
     }
-
     .share-footer strong { color: var(--gold); }
 
-    /* ─── Privacy banner ─── */
+    /* ══════════════════════════════════
+       SUGGESTIONS PANEL
+    ══════════════════════════════════ */
+    .suggestions-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      align-items: start;
+    }
+
+    @media (max-width: 760px) {
+      .suggestions-layout { grid-template-columns: 1fr; }
+    }
+
+    /* ── form card ── */
+    .form-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 16px; padding: 36px 32px;
+    }
+
+    .form-card h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.2rem; color: var(--gold); margin-bottom: 6px;
+    }
+    .form-card p.form-desc {
+      font-size: 0.83rem; color: var(--text-muted);
+      font-style: italic; margin-bottom: 28px;
+    }
+
+    .field { margin-bottom: 18px; }
+    .field label {
+      display: block; font-size: 0.78rem; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--text-muted);
+      font-weight: 600; margin-bottom: 7px;
+    }
+
+    .field input, .field textarea, .field select {
+      width: 100%; background: var(--mid); border: 1px solid var(--border);
+      border-radius: 9px; padding: 13px 16px;
+      color: var(--text); font-family: 'Source Serif 4', serif;
+      font-size: 0.9rem; transition: border-color 0.2s, box-shadow 0.2s;
+      outline: none; resize: vertical;
+    }
+    .field input:focus, .field textarea:focus, .field select:focus {
+      border-color: var(--gold-dark);
+      box-shadow: 0 0 0 3px rgba(200,169,110,0.1);
+    }
+    .field textarea { min-height: 110px; }
+
+    .field select option { background: var(--mid); }
+
+    .char-counter {
+      text-align: right; font-size: 0.72rem;
+      color: var(--text-dim); margin-top: 5px;
+    }
+    .char-counter.warn { color: var(--gold); }
+    .char-counter.over { color: #e05555; }
+
+    .submit-btn {
+      width: 100%; margin-top: 8px;
+      background: linear-gradient(135deg, var(--gold-dark), var(--gold));
+      color: var(--deep); border: none; border-radius: 10px;
+      padding: 14px 24px; font-family: 'Source Serif 4', serif;
+      font-size: 0.88rem; font-weight: 700; letter-spacing: 0.08em;
+      text-transform: uppercase; cursor: pointer;
+      transition: opacity 0.2s, transform 0.2s, box-shadow 0.2s;
+    }
+    .submit-btn:hover:not(:disabled) {
+      opacity: 0.9; transform: translateY(-1px);
+      box-shadow: 0 8px 24px rgba(200,169,110,0.25);
+    }
+    .submit-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    /* ── toast ── */
+    .toast {
+      margin-top: 16px; padding: 12px 18px; border-radius: 9px;
+      font-size: 0.83rem; font-weight: 600; text-align: center;
+      display: none;
+    }
+    .toast.success { background: rgba(46,125,79,0.2); border: 1px solid rgba(46,125,79,0.4); color: #6fcf97; }
+    .toast.error   { background: rgba(146,36,36,0.2); border: 1px solid rgba(146,36,36,0.4); color: #e07070; }
+
+    /* ── suggestions feed ── */
+    .feed-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 16px; padding: 28px 28px;
+    }
+    .feed-card h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.2rem; color: var(--gold); margin-bottom: 20px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+
+    .refresh-btn {
+      background: none; border: 1px solid var(--border); border-radius: 8px;
+      color: var(--text-muted); padding: 5px 12px;
+      font-size: 0.75rem; cursor: pointer;
+      font-family: 'Source Serif 4', serif; letter-spacing: 0.05em;
+      transition: all 0.2s;
+    }
+    .refresh-btn:hover { border-color: var(--gold-dark); color: var(--gold); }
+
+    .suggestion-item {
+      padding: 16px 0; border-bottom: 1px solid var(--border);
+      animation: fadeUp 0.4s ease;
+    }
+    .suggestion-item:last-child { border-bottom: none; padding-bottom: 0; }
+    .suggestion-item:first-child { padding-top: 0; }
+
+    .sug-header {
+      display: flex; align-items: center; gap: 10px; margin-bottom: 7px;
+    }
+    .sug-avatar {
+      width: 30px; height: 30px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--gold-dark), var(--mid));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px; font-weight: 700; color: var(--gold-light);
+      flex-shrink: 0;
+    }
+    .sug-meta { flex: 1; }
+    .sug-name { font-size: 0.83rem; font-weight: 700; color: var(--text); }
+    .sug-date { font-size: 0.72rem; color: var(--text-dim); font-style: italic; }
+    .sug-category {
+      font-size: 0.68rem; letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--gold-dark); font-weight: 600;
+      background: rgba(200,169,110,0.1); border: 1px solid var(--border);
+      padding: 2px 9px; border-radius: 100px;
+    }
+
+    .sug-text {
+      font-size: 0.88rem; color: var(--text-muted);
+      line-height: 1.65; font-style: italic;
+    }
+
+    .feed-empty {
+      text-align: center; padding: 40px 0;
+      color: var(--text-dim); font-style: italic; font-size: 0.88rem;
+    }
+    .feed-empty span { display: block; font-size: 28px; margin-bottom: 10px; }
+
+    .feed-loading {
+      text-align: center; padding: 32px;
+      color: var(--text-muted); font-style: italic; font-size: 0.85rem;
+    }
+
+    /* spinner */
+    .spinner {
+      display: inline-block; width: 18px; height: 18px;
+      border: 2px solid var(--border);
+      border-top-color: var(--gold);
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      vertical-align: middle; margin-right: 8px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ══════════════════════════════════
+       PRIVACY BANNER
+    ══════════════════════════════════ */
     #privacy-banner {
-      position: fixed;
-      bottom: 0; left: 0; right: 0;
-      background: rgba(14,13,8,0.97);
+      position: fixed; bottom: 0; left: 0; right: 0; z-index: 999;
+      background: rgba(11,11,8,0.97); backdrop-filter: blur(14px);
       border-top: 1px solid var(--border);
       padding: 18px 32px;
-      display: flex;
-      align-items: center;
-      gap: 24px;
-      z-index: 1000;
-      backdrop-filter: blur(12px);
-      flex-wrap: wrap;
-      justify-content: center;
+      display: flex; align-items: center; gap: 24px;
+      flex-wrap: wrap; justify-content: center;
       transform: translateY(100%);
-      animation: slideUp 0.5s 1.5s ease forwards;
+      animation: slideUp 0.5s 1.6s ease forwards;
     }
-
     #privacy-banner p {
-      font-size: 0.82rem;
-      color: var(--text-muted);
-      flex: 1;
-      min-width: 220px;
-      text-align: center;
+      font-size: 0.81rem; color: var(--text-muted);
+      flex: 1; min-width: 220px; text-align: center;
     }
-
     #privacy-banner a { color: var(--gold); text-decoration: none; border-bottom: 1px solid var(--border); }
 
     .btn-accept {
       background: linear-gradient(135deg, var(--gold-dark), var(--gold));
-      color: var(--deep);
-      border: none;
-      padding: 10px 28px;
-      border-radius: 100px;
-      font-family: 'Source Serif 4', serif;
-      font-weight: 600;
-      font-size: 0.82rem;
-      letter-spacing: 0.06em;
-      cursor: pointer;
-      white-space: nowrap;
+      color: var(--deep); border: none;
+      padding: 10px 28px; border-radius: 100px;
+      font-family: 'Source Serif 4', serif; font-weight: 700;
+      font-size: 0.81rem; letter-spacing: 0.07em; cursor: pointer;
       transition: opacity 0.2s, transform 0.2s;
     }
-
     .btn-accept:hover { opacity: 0.9; transform: scale(1.02); }
 
-    /* ─── Footer ─── */
+    /* ══════════════════════════════════
+       FOOTER
+    ══════════════════════════════════ */
     footer {
-      position: relative;
-      z-index: 1;
+      position: relative; z-index: 1;
       border-top: 1px solid var(--border);
-      text-align: center;
-      padding: 28px 24px;
-      font-size: 0.78rem;
-      color: var(--text-muted);
-      letter-spacing: 0.06em;
+      text-align: center; padding: 28px 24px;
+      font-size: 0.77rem; color: var(--text-dim); letter-spacing: 0.06em;
     }
-
     footer strong { color: var(--gold); }
 
-    /* ─── Animations ─── */
+    /* ══════════════════════════════════
+       ANIMATIONS
+    ══════════════════════════════════ */
     @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(18px); }
+      from { opacity: 0; transform: translateY(16px); }
       to   { opacity: 1; transform: translateY(0); }
     }
-
     @keyframes slideUp {
       from { transform: translateY(100%); }
       to   { transform: translateY(0); }
     }
 
-    /* ─── Responsive ─── */
+    /* ══════════════════════════════════
+       RESPONSIVE
+    ══════════════════════════════════ */
     @media (max-width: 600px) {
-      main { padding: 36px 16px 60px; }
-      .share-section { padding: 28px 20px; }
-      .video-grid { grid-template-columns: 1fr; }
-      .links-grid { grid-template-columns: 1fr; }
+      main { padding: 36px 16px 80px; }
+      .share-box { padding: 28px 18px; }
+      .video-grid, .links-grid { grid-template-columns: 1fr; }
+      .form-card { padding: 24px 18px; }
+      .tab-btn span.tab-label { display: none; }
     }
   </style>
 </head>
 <body>
 
-<!-- Header -->
+<!-- ══ HEADER ══ -->
 <header>
   <div class="header-badge">Escola Bíblica Dominical · AD Maguari</div>
   <h1 class="site-title">
     Auxílio para Professores
-    <span>Recursos pedagógicos e espirituais para o ensino da Palavra</span>
+    <em>Recursos pedagógicos e espirituais para o ensino da Palavra</em>
   </h1>
   <div class="header-divider"><span>✦</span></div>
 </header>
 
-<!-- Main content -->
+<!-- ══ NAV TABS ══ -->
+<nav class="tab-nav" role="tablist">
+  <button class="tab-btn active" onclick="switchTab('recursos')" role="tab" data-tab="recursos">
+    <span class="tab-icon">📖</span>
+    <span class="tab-label">Recursos</span>
+  </button>
+  <button class="tab-btn" onclick="switchTab('compartilhar')" role="tab" data-tab="compartilhar">
+    <span class="tab-icon">🔗</span>
+    <span class="tab-label">Compartilhar</span>
+  </button>
+  <button class="tab-btn" onclick="switchTab('sugestoes')" role="tab" data-tab="sugestoes">
+    <span class="tab-icon">💡</span>
+    <span class="tab-label">Sugestões</span>
+  </button>
+</nav>
+
+<!-- ══ MAIN ══ -->
 <main>
 
-  <!-- Videos section -->
-  <section class="video-section">
-    <h2 class="section-heading">Vídeos Recomendados</h2>
-    <div class="video-grid" id="videoGrid">
+  <!-- ── PAINEL: RECURSOS ── -->
+  <div class="tab-panel active" id="panel-recursos" role="tabpanel">
 
-      <div class="video-card">
-        <div class="video-label">Aula 1</div>
-        <div class="video-wrapper">
-          <iframe src="https://www.youtube.com/embed/jYRTVIQopC4?si=JDIEkW50XKYPHIFo"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowfullscreen></iframe>
+    <section class="video-section">
+      <h2 class="section-heading">Vídeos Recomendados</h2>
+      <div class="video-grid">
+
+        <div class="video-card">
+          <div class="video-label">Aula 1</div>
+          <div class="video-wrapper">
+            <iframe src="https://www.youtube.com/embed/jYRTVIQopC4?si=JDIEkW50XKYPHIFo"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowfullscreen loading="lazy"></iframe>
+          </div>
         </div>
+
+        <div class="video-card">
+          <div class="video-label">Aula 2</div>
+          <div class="video-wrapper">
+            <iframe src="https://www.youtube.com/embed/UZHvUxyRZSA?si=DYrYWD5bZzafhfh-"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowfullscreen loading="lazy"></iframe>
+          </div>
+        </div>
+
+        <div class="video-card">
+          <div class="video-label">Aula 3</div>
+          <div class="video-wrapper">
+            <iframe src="https://www.youtube.com/embed/NrUTnPzJj5A?si=SoFYCgPMNgf2AwjV"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowfullscreen loading="lazy"></iframe>
+          </div>
+        </div>
+
+        <div class="video-card">
+          <div class="video-label">Aula 4</div>
+          <div class="video-wrapper">
+            <iframe src="https://www.youtube.com/embed/NjHjBPzbJGQ?si=py1JVtPkqcfLqJSz"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowfullscreen loading="lazy"></iframe>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <section class="links-section">
+      <h2 class="section-heading">Recursos Online</h2>
+      <ul class="links-grid">
+
+        <li class="link-card">
+          <a href="https://adaliahelena.blogspot.com/" target="_blank" rel="noopener">
+            <span class="link-icon">📖</span>
+            <span class="link-text"><strong>Blog Adalia Helena</strong><small>Reflexões e materiais para EBD</small></span>
+            <span class="link-arrow">→</span>
+          </a>
+        </li>
+
+        <li class="link-card">
+          <a href="https://www.pecadorconfesso.com/" target="_blank" rel="noopener">
+            <span class="link-icon">🙏</span>
+            <span class="link-text"><strong>Pecador Confesso</strong><small>Artigos e estudos bíblicos</small></span>
+            <span class="link-arrow">→</span>
+          </a>
+        </li>
+
+        <li class="link-card">
+          <a href="https://escolabiblicadominical.org/licoes-biblicas-adultos/" target="_blank" rel="noopener">
+            <span class="link-icon">📚</span>
+            <span class="link-text"><strong>Lições Bíblicas</strong><small>Escola Bíblica Dominical</small></span>
+            <span class="link-arrow">→</span>
+          </a>
+        </li>
+
+        <li class="link-card">
+          <a href="https://pin.it/1IYj0NwGk" target="_blank" rel="noopener">
+            <span class="link-icon">📌</span>
+            <span class="link-text"><strong>Pinterest</strong><small>Materiais visuais e ideias</small></span>
+            <span class="link-arrow">→</span>
+          </a>
+        </li>
+
+      </ul>
+    </section>
+
+  </div>
+
+  <!-- ── PAINEL: COMPARTILHAR ── -->
+  <div class="tab-panel" id="panel-compartilhar" role="tabpanel">
+    <div class="share-box">
+      <h2>Compartilhe esta Página</h2>
+      <p>Escaneie o QR Code e envie para outros professores da EBD</p>
+      <div id="qrcode"></div>
+      <p class="share-footer">Desenvolvido por <strong>Bruno dos Santos</strong> · AD Maguari</p>
+    </div>
+  </div>
+
+  <!-- ── PAINEL: SUGESTÕES ── -->
+  <div class="tab-panel" id="panel-sugestoes" role="tabpanel">
+    <div class="suggestions-layout">
+
+      <!-- Formulário -->
+      <div class="form-card">
+        <h3>Envie sua Sugestão</h3>
+        <p class="form-desc">Compartilhe recursos, ideias ou materiais que possam ajudar outros professores.</p>
+
+        <div class="field">
+          <label for="sug-nome">Seu nome</label>
+          <input type="text" id="sug-nome" placeholder="Ex: João Silva" maxlength="60">
+        </div>
+
+        <div class="field">
+          <label for="sug-categoria">Categoria</label>
+          <select id="sug-categoria">
+            <option value="">Selecione uma categoria…</option>
+            <option value="Video">🎬 Vídeo</option>
+            <option value="Artigo">📄 Artigo / Blog</option>
+            <option value="Livro">📗 Livro</option>
+            <option value="Dinâmica">🎯 Dinâmica de Aula</option>
+            <option value="Ferramenta">🛠️ Ferramenta ou App</option>
+            <option value="Outro">💬 Outro</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="sug-texto">Sugestão</label>
+          <textarea id="sug-texto" placeholder="Descreva o recurso ou ideia que você quer compartilhar…" maxlength="500"></textarea>
+          <div class="char-counter" id="char-counter">0 / 500</div>
+        </div>
+
+        <div class="field">
+          <label for="sug-link">Link (opcional)</label>
+          <input type="url" id="sug-link" placeholder="https://exemplo.com">
+        </div>
+
+        <button class="submit-btn" id="submit-btn" onclick="enviarSugestao()">Enviar Sugestão</button>
+        <div class="toast" id="form-toast"></div>
       </div>
 
-      <div class="video-card">
-        <div class="video-label">Aula 2</div>
-        <div class="video-wrapper">
-          <iframe src="https://www.youtube.com/embed/UZHvUxyRZSA?si=DYrYWD5bZzafhfh-"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowfullscreen></iframe>
-        </div>
-      </div>
-
-      <div class="video-card">
-        <div class="video-label">Aula 3</div>
-        <div class="video-wrapper">
-          <iframe src="https://www.youtube.com/embed/NrUTnPzJj5A?si=SoFYCgPMNgf2AwjV"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowfullscreen></iframe>
-        </div>
-      </div>
-
-      <div class="video-card">
-        <div class="video-label">Aula 4</div>
-        <div class="video-wrapper">
-          <iframe src="https://www.youtube.com/embed/NjHjBPzbJGQ?si=py1JVtPkqcfLqJSz"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowfullscreen></iframe>
+      <!-- Feed de sugestões -->
+      <div class="feed-card">
+        <h3>
+          Sugestões da Comunidade
+          <button class="refresh-btn" onclick="carregarSugestoes()">↻ Atualizar</button>
+        </h3>
+        <div id="feed-content">
+          <div class="feed-loading"><span class="spinner"></span>Carregando sugestões…</div>
         </div>
       </div>
 
     </div>
-  </section>
-
-  <!-- Links section -->
-  <section class="links-section">
-    <h2 class="section-heading">Recursos Online</h2>
-    <ul class="links-grid">
-
-      <li class="link-card">
-        <a href="https://adaliahelena.blogspot.com/" target="_blank" rel="noopener">
-          <span class="link-icon">📖</span>
-          <span class="link-text">
-            <strong>Blog Adalia Helena</strong>
-            <small>Reflexões e materiais para EBD</small>
-          </span>
-          <span class="link-arrow">→</span>
-        </a>
-      </li>
-
-      <li class="link-card">
-        <a href="https://www.pecadorconfesso.com/" target="_blank" rel="noopener">
-          <span class="link-icon">🙏</span>
-          <span class="link-text">
-            <strong>Pecador Confesso</strong>
-            <small>Artigos e estudos bíblicos</small>
-          </span>
-          <span class="link-arrow">→</span>
-        </a>
-      </li>
-
-      <li class="link-card">
-        <a href="https://escolabiblicadominical.org/licoes-biblicas-adultos/" target="_blank" rel="noopener">
-          <span class="link-icon">📚</span>
-          <span class="link-text">
-            <strong>Lições Bíblicas</strong>
-            <small>Escola Bíblica Dominical</small>
-          </span>
-          <span class="link-arrow">→</span>
-        </a>
-      </li>
-
-      <li class="link-card">
-        <a href="https://pin.it/1IYj0NwGk" target="_blank" rel="noopener">
-          <span class="link-icon">📌</span>
-          <span class="link-text">
-            <strong>Pinterest</strong>
-            <small>Materiais visuais e ideias</small>
-          </span>
-          <span class="link-arrow">→</span>
-        </a>
-      </li>
-
-    </ul>
-  </section>
-
-  <!-- Share section -->
-  <section class="share-section">
-    <h2>Compartilhe esta Página</h2>
-    <p>Escaneie o QR Code e envie para outros professores</p>
-    <div id="qrcode"></div>
-    <p class="share-footer">Desenvolvido por <strong>Bruno dos Santos</strong> · AD Maguari</p>
-  </section>
+  </div>
 
 </main>
 
 <!-- Footer -->
 <footer>
-  <span>© 2025 · Escola Bíblica Dominical · Assembleia de Deus Maguari · Todos os direitos reservados</span>
+  © 2025 · Escola Bíblica Dominical · Assembleia de Deus Maguari · Todos os direitos reservados
+  — Desenvolvido por <strong>Bruno dos Santos</strong>
 </footer>
 
 <!-- Privacy banner -->
 <div id="privacy-banner">
-  <p>
-    Este site utiliza cookies para melhorar sua experiência. Ao continuar, você concorda com nossa
-    <a href="#">Política de Privacidade</a>.
-  </p>
+  <p>Este site utiliza cookies para melhorar sua experiência. Ao continuar, você concorda com nossa <a href="#">Política de Privacidade</a>.</p>
   <button class="btn-accept" onclick="aceitarPrivacidade()">Entendi</button>
 </div>
 
+<!-- ══════════════════════════════════════
+     SCRIPTS
+══════════════════════════════════════ -->
 <script>
-  // QR Code
-  document.addEventListener('DOMContentLoaded', function () {
-    if (typeof QRCode !== 'undefined') {
-      new QRCode(document.getElementById('qrcode'), {
-        text: window.location.href,
-        width: 140,
-        height: 140,
-        colorDark: '#0D0D0D',
-        colorLight: '#FFFFFF',
-        correctLevel: QRCode.CorrectLevel.H
-      });
-    }
+/* ── Supabase client ── */
+let supabase = null;
 
-    // Privacy banner
-    const accepted = getCookie('privacyAccepted');
-    if (accepted === 'true') {
-      document.getElementById('privacy-banner').style.display = 'none';
-    }
+function initSupabase() {
+  try {
+    supabase = window.supabase.createClient(https://hvabvrtwlagiybynppyx.supabase.co, eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh2YWJ2cnR3bGFnaXlieW5wcHl4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQzNTU0NDgsImV4cCI6MjA4OTkzMTQ0OH0.xVPP4Fag-h2P_GjgYexlTTxYgwtSf-HuDtVIlK50N-I);
+  } catch(e) {
+    console.warn('Supabase não configurado. Configure SUPABASE_URL e SUPABASE_KEY.', e);
+  }
+}
+
+/* ── QR Code ── */
+document.addEventListener('DOMContentLoaded', function () {
+  initSupabase();
+
+  if (typeof QRCode !== 'undefined') {
+    new QRCode(document.getElementById('qrcode'), {
+      text: window.location.href,
+      width: 148, height: 148,
+      colorDark: '#0B0B08', colorLight: '#FFFFFF',
+      correctLevel: QRCode.CorrectLevel.H
+    });
+  }
+
+  // Privacy banner
+  if (getCookie('privacyAccepted') === 'true') {
+    document.getElementById('privacy-banner').style.display = 'none';
+  }
+
+  // Char counter
+  const textarea = document.getElementById('sug-texto');
+  const counter  = document.getElementById('char-counter');
+  textarea.addEventListener('input', () => {
+    const len = textarea.value.length;
+    counter.textContent = len + ' / 500';
+    counter.className = 'char-counter' + (len > 450 ? (len >= 500 ? ' over' : ' warn') : '');
   });
+});
 
-  function aceitarPrivacidade() {
-    setCookie('privacyAccepted', 'true', 365);
-    const banner = document.getElementById('privacy-banner');
-    banner.style.transition = 'transform 0.4s ease';
-    banner.style.transform = 'translateY(100%)';
-    setTimeout(() => banner.style.display = 'none', 400);
+/* ── Tabs ── */
+function switchTab(tab) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelector(`[data-tab="${tab}"]`).classList.add('active');
+  document.getElementById('panel-' + tab).classList.add('active');
+
+  if (tab === 'sugestoes') carregarSugestoes();
+}
+
+/* ── Carregar sugestões ── */
+async function carregarSugestoes() {
+  const feed = document.getElementById('feed-content');
+
+  if (!supabase || SUPABASE_URL.includes('https://hvabvrtwlagiybynppyx.supabase.co')) {
+    feed.innerHTML = renderDemoSugestoes();
+    return;
   }
 
-  function setCookie(name, value, days) {
-    const expires = new Date(Date.now() + days * 864e5).toUTCString();
-    document.cookie = name + '=' + value + '; expires=' + expires + '; path=/';
+  feed.innerHTML = '<div class="feed-loading"><span class="spinner"></span>Carregando…</div>';
+
+  try {
+    const { data, error } = await supabase
+      .from('sugestoes')
+      .select('*')
+      .order('created_at', { ascending: false })
+      .limit(20);
+
+    if (error) throw error;
+
+    if (!data || data.length === 0) {
+      feed.innerHTML = '<div class="feed-empty"><span>🕊️</span>Nenhuma sugestão ainda. Seja o primeiro!</div>';
+      return;
+    }
+
+    feed.innerHTML = data.map(renderSugestaoItem).join('');
+
+  } catch (err) {
+    console.error(err);
+    feed.innerHTML = '<div class="feed-empty"><span>⚠️</span>Erro ao carregar. Verifique a configuração do Supabase.</div>';
+  }
+}
+
+function renderSugestaoItem(s) {
+  const inicial = (s.nome || 'A').charAt(0).toUpperCase();
+  const data    = new Date(s.created_at).toLocaleDateString('pt-BR', { day:'2-digit', month:'short', year:'numeric' });
+  const link    = s.link ? `<a href="${s.link}" target="_blank" rel="noopener" style="color:var(--gold);font-size:.78rem;margin-top:6px;display:inline-block;">🔗 Ver recurso →</a>` : '';
+
+  return `
+    <div class="suggestion-item">
+      <div class="sug-header">
+        <div class="sug-avatar">${inicial}</div>
+        <div class="sug-meta">
+          <div class="sug-name">${escapeHtml(s.nome || 'Anônimo')}</div>
+          <div class="sug-date">${data}</div>
+        </div>
+        ${s.categoria ? `<span class="sug-category">${escapeHtml(s.categoria)}</span>` : ''}
+      </div>
+      <p class="sug-text">${escapeHtml(s.texto)}</p>
+      ${link}
+    </div>
+  `;
+}
+
+/* Demo quando Supabase não está configurado */
+function renderDemoSugestoes() {
+  const demos = [
+    { nome: 'Maria Lima',  categoria: 'Vídeo',    texto: 'Canal "Palavra Viva" no YouTube tem ótimas aulas para iniciantes na docência bíblica.', link: '' },
+    { nome: 'Pedro Alves', categoria: 'Dinâmica', texto: 'Dinâmica dos "versículos escondidos": escrever versículos em pedaços de papel e os alunos montam.', link: '' },
+    { nome: 'Ana Ferreira',categoria: 'Artigo',   texto: 'Blog do Instituto Bíblico tem artigos excelentes sobre hermenêutica acessível para professores leigos.', link: 'https://example.com' },
+  ];
+
+  const aviso = `<div style="background:rgba(200,169,110,0.07);border:1px solid var(--border);border-radius:8px;padding:12px 16px;margin-bottom:20px;font-size:.78rem;color:var(--text-muted);font-style:italic;">
+    ⚙️ <strong style="color:var(--gold);">Modo demonstração</strong> — Configure seu SUPABASE_URL e SUPABASE_KEY para ativar o banco de dados real.
+  </div>`;
+
+  const now = new Date().toISOString();
+  return aviso + demos.map(s => renderSugestaoItem({...s, created_at: now})).join('');
+}
+
+/* ── Enviar sugestão ── */
+async function enviarSugestao() {
+  const nome      = document.getElementById('sug-nome').value.trim();
+  const categoria = document.getElementById('sug-categoria').value;
+  const texto     = document.getElementById('sug-texto').value.trim();
+  const link      = document.getElementById('sug-link').value.trim();
+  const btn       = document.getElementById('submit-btn');
+  const toast     = document.getElementById('form-toast');
+
+  // Validação
+  if (!texto) { showToast('error', 'Por favor, escreva sua sugestão.'); return; }
+  if (texto.length < 10) { showToast('error', 'Sugestão muito curta. Escreva pelo menos 10 caracteres.'); return; }
+  if (link && !isValidURL(link)) { showToast('error', 'O link informado não é válido.'); return; }
+
+  btn.disabled = true;
+  btn.textContent = 'Enviando…';
+
+  if (!supabase || SUPABASE_URL.includes('https://hvabvrtwlagiybynppyx.supabase.co')) {
+    // Demo: simula envio
+    await sleep(900);
+    showToast('success', '✅ (Modo demo) Sugestão simulada com sucesso! Configure o Supabase para persistir.');
+    resetForm();
+    btn.disabled = false; btn.textContent = 'Enviar Sugestão';
+    return;
   }
 
-  function getCookie(name) {
-    return document.cookie.split('; ').reduce((acc, c) => {
-      const [k, v] = c.split('=');
-      return k === name ? v : acc;
-    }, '');
+  try {
+    const { error } = await supabase.from('sugestoes').insert([{
+      nome:      nome || null,
+      categoria: categoria || null,
+      texto,
+      link:      link || null
+    }]);
+
+    if (error) throw error;
+
+    showToast('success', '✅ Sugestão enviada! Obrigado pela contribuição.');
+    resetForm();
+    carregarSugestoes();
+
+  } catch (err) {
+    console.error(err);
+    showToast('error', '❌ Erro ao enviar: ' + (err.message || 'Verifique o console.'));
   }
+
+  btn.disabled = false;
+  btn.textContent = 'Enviar Sugestão';
+}
+
+function showToast(type, msg) {
+  const t = document.getElementById('form-toast');
+  t.textContent = msg;
+  t.className = 'toast ' + type;
+  t.style.display = 'block';
+  clearTimeout(t._timer);
+  t._timer = setTimeout(() => { t.style.display = 'none'; }, 5000);
+}
+
+function resetForm() {
+  ['sug-nome','sug-texto','sug-link'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('sug-categoria').value = '';
+  document.getElementById('char-counter').textContent = '0 / 500';
+}
+
+/* ── Helpers ── */
+function escapeHtml(str) {
+  return String(str)
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+function isValidURL(str) {
+  try { new URL(str); return true; } catch { return false; }
+}
+function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+/* ── Privacy ── */
+function aceitarPrivacidade() {
+  setCookie('privacyAccepted', 'true', 365);
+  const el = document.getElementById('privacy-banner');
+  el.style.transition = 'transform 0.4s ease';
+  el.style.transform = 'translateY(100%)';
+  setTimeout(() => el.style.display = 'none', 420);
+}
+function setCookie(n,v,d) {
+  document.cookie = n+'='+v+'; expires='+new Date(Date.now()+d*864e5).toUTCString()+'; path=/';
+}
+function getCookie(n) {
+  return document.cookie.split('; ').reduce((a,c)=>{const[k,v]=c.split('=');return k===n?v:a},'');
+}
 </script>
 
 </body>
