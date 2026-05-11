@@ -14,72 +14,59 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
-/* ────────────────────────────────────────
+/* ─────────────────────────────────────
    TOKENS
-──────────────────────────────────────── */
+───────────────────────────────────── */
 :root {
-  /* Neutrals */
-  --white:       #FFFFFF;
-  --gray-50:     #FAFAFA;
-  --gray-100:    #F4F4F5;
-  --gray-150:    #EFEFEF;
-  --gray-200:    #E4E4E7;
-  --gray-300:    #D1D1D6;
-  --gray-400:    #A1A1AA;
-  --gray-500:    #71717A;
-  --gray-600:    #52525B;
-  --gray-700:    #3F3F46;
-  --gray-800:    #27272A;
-  --gray-900:    #18181B;
-  --gray-950:    #09090B;
+  --white:        #FFFFFF;
+  --gray-50:      #FAFAFA;
+  --gray-100:     #F4F4F5;
+  --gray-200:     #E4E4E7;
+  --gray-300:     #D1D1D6;
+  --gray-400:     #A1A1AA;
+  --gray-500:     #71717A;
+  --gray-600:     #52525B;
+  --gray-700:     #3F3F46;
+  --gray-800:     #27272A;
+  --gray-900:     #18181B;
 
-  /* Brand — deep indigo meets warm amber */
-  --brand:       #1C1917;
-  --brand-2:     #292524;
-  --accent:      #B45309;
-  --accent-soft: #FEF3C7;
-  --accent-mid:  #D97706;
-  --accent-pale: #FFFBEB;
+  --brand:        #1C1917;
+  --brand-2:      #292524;
+  --accent:       #B45309;
+  --accent-soft:  #FEF3C7;
+  --accent-mid:   #D97706;
+  --accent-pale:  #FFFBEB;
 
-  /* Semantic */
-  --bg:          var(--white);
-  --bg-subtle:   var(--gray-50);
-  --bg-muted:    var(--gray-100);
-  --border:      var(--gray-200);
-  --border-soft: rgba(0,0,0,0.06);
-  --text:        var(--gray-900);
-  --text-muted:  var(--gray-500);
-  --text-faint:  var(--gray-400);
-  --success:     #166534;
-  --success-bg:  #F0FDF4;
-  --error:       #9F1239;
-  --error-bg:    #FFF1F2;
+  --border:       var(--gray-200);
+  --border-soft:  rgba(0,0,0,0.06);
+  --text:         var(--gray-900);
+  --text-muted:   var(--gray-500);
+  --text-faint:   var(--gray-400);
+  --success:      #166534;
+  --success-bg:   #F0FDF4;
+  --error:        #9F1239;
+  --error-bg:     #FFF1F2;
 
-  /* Typography */
-  --font-sans:   'Geist', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  --font-serif:  'Instrument Serif', Georgia, serif;
+  --font-sans:    'Geist', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-serif:   'Instrument Serif', Georgia, serif;
 
-  /* Radius */
-  --r-sm:  6px;
-  --r-md:  10px;
-  --r-lg:  16px;
-  --r-xl:  20px;
+  --r-sm:   6px;
+  --r-md:   10px;
+  --r-lg:   16px;
+  --r-xl:   20px;
 
-  /* Shadow */
-  --shadow-xs:   0 1px 2px rgba(0,0,0,0.04);
-  --shadow-sm:   0 1px 3px rgba(0,0,0,0.07), 0 1px 2px rgba(0,0,0,0.04);
-  --shadow-md:   0 4px 12px rgba(0,0,0,0.07), 0 2px 4px rgba(0,0,0,0.04);
-  --shadow-lg:   0 12px 32px rgba(0,0,0,0.09), 0 4px 8px rgba(0,0,0,0.04);
-  --shadow-focus:0 0 0 3px rgba(180,83,9,0.18);
+  --shadow-xs:    0 1px 2px rgba(0,0,0,0.04);
+  --shadow-sm:    0 1px 3px rgba(0,0,0,0.07), 0 1px 2px rgba(0,0,0,0.04);
+  --shadow-md:    0 4px 12px rgba(0,0,0,0.07), 0 2px 4px rgba(0,0,0,0.04);
+  --shadow-lg:    0 12px 32px rgba(0,0,0,0.09), 0 4px 8px rgba(0,0,0,0.04);
+  --shadow-focus: 0 0 0 3px rgba(180,83,9,0.18);
 
-  /* Transitions */
-  --ease:        cubic-bezier(0.16, 1, 0.3, 1);
-  --ease-out:    cubic-bezier(0.0, 0.0, 0.2, 1);
+  --ease:         cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* ────────────────────────────────────────
+/* ─────────────────────────────────────
    RESET
-──────────────────────────────────────── */
+───────────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
 img, video, iframe { display: block; max-width: 100%; }
@@ -87,24 +74,26 @@ button { font-family: inherit; cursor: pointer; }
 input, textarea, select { font-family: inherit; }
 a { color: inherit; }
 
-/* ────────────────────────────────────────
-   BASE
-──────────────────────────────────────── */
 body {
   font-family: var(--font-sans);
-  background: var(--bg);
+  background: var(--white);
   color: var(--text);
   min-height: 100vh;
   font-size: 14px;
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
 }
 
-/* ────────────────────────────────────────
+/* ─────────────────────────────────────
+   PAGE VIEWS — app router
+───────────────────────────────────── */
+.view { display: none; }
+.view.active { display: block; }
+
+/* ─────────────────────────────────────
    TOPBAR
-──────────────────────────────────────── */
+───────────────────────────────────── */
 .topbar {
   height: 40px;
   background: var(--brand);
@@ -112,11 +101,8 @@ body {
   gap: 6px;
   opacity: 0; animation: fadeDown 0.5s 0s var(--ease) forwards;
 }
-.topbar-text {
-  font-size: 11.5px; letter-spacing: 0.04em;
-  color: rgba(255,255,255,0.55);
-}
-.topbar-sep { color: rgba(255,255,255,0.2); font-size: 10px; }
+.topbar-text { font-size: 11.5px; letter-spacing: 0.04em; color: rgba(255,255,255,0.45); }
+.topbar-sep  { color: rgba(255,255,255,0.15); font-size: 10px; }
 .topbar-badge {
   font-size: 10.5px; font-weight: 500; letter-spacing: 0.03em;
   color: rgba(254,243,199,0.85);
@@ -125,91 +111,59 @@ body {
   padding: 1px 8px; border-radius: 100px;
 }
 
-/* ────────────────────────────────────────
+/* ─────────────────────────────────────
    HEADER
-──────────────────────────────────────── */
+───────────────────────────────────── */
 .site-header {
-  background: var(--white);
+  background: rgba(255,255,255,0.92);
+  backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--border);
   padding: 0 32px;
   height: 60px;
   display: flex; align-items: center; justify-content: space-between;
-  position: sticky; top: 0; z-index: 100;
-  backdrop-filter: blur(12px);
-  background: rgba(255,255,255,0.92);
+  position: sticky; top: 0; z-index: 200;
   opacity: 0; animation: fadeDown 0.5s 0.05s var(--ease) forwards;
 }
-
-.header-left {
-  display: flex; align-items: center; gap: 10px;
-}
-
-.header-logo {
-  width: 30px; height: 30px;
-  background: var(--brand);
+.header-left  { display: flex; align-items: center; gap: 10px; }
+.header-logo  {
+  width: 30px; height: 30px; background: var(--brand);
   border-radius: var(--r-sm);
   display: flex; align-items: center; justify-content: center;
   font-size: 14px; flex-shrink: 0;
 }
+.header-wordmark strong { display: block; font-size: 13px; font-weight: 600; letter-spacing: -0.01em; color: var(--gray-900); line-height: 1; }
+.header-wordmark span   { font-size: 10.5px; color: var(--text-muted); line-height: 1; }
+.header-divider { width: 1px; height: 20px; background: var(--border); margin: 0 4px; }
 
-.header-wordmark {
-  display: flex; flex-direction: column; gap: 1px;
-}
-.header-wordmark strong {
-  font-size: 13px; font-weight: 600; letter-spacing: -0.01em;
-  color: var(--gray-900); line-height: 1;
-}
-.header-wordmark span {
-  font-size: 10.5px; color: var(--text-muted); line-height: 1;
-}
-
-.header-divider {
-  width: 1px; height: 20px;
-  background: var(--border); margin: 0 4px;
-}
-
-.header-nav {
-  display: flex; align-items: center; gap: 2px;
-}
-
+.header-nav { display: flex; align-items: center; gap: 2px; }
 .nav-btn {
   display: flex; align-items: center; gap: 6px;
   padding: 6px 12px; border-radius: var(--r-sm);
   background: none; border: none;
-  font-size: 13px; font-weight: 500;
-  color: var(--text-muted);
-  transition: background 0.15s, color 0.15s;
-  white-space: nowrap;
+  font-size: 13px; font-weight: 500; color: var(--text-muted);
+  transition: background 0.15s, color 0.15s; white-space: nowrap;
 }
-.nav-btn:hover { background: var(--gray-100); color: var(--gray-800); }
-.nav-btn.active {
-  background: var(--gray-100);
-  color: var(--gray-900);
-}
+.nav-btn:hover  { background: var(--gray-100); color: var(--gray-800); }
+.nav-btn.active { background: var(--gray-100); color: var(--gray-900); }
 .nav-btn .nav-icon { font-size: 13px; }
 
-.header-right {
-  display: flex; align-items: center; gap: 8px;
-}
+.header-right { display: flex; align-items: center; gap: 8px; }
 .header-chip {
   font-size: 11px; font-weight: 500; letter-spacing: 0.02em;
-  color: var(--accent);
-  background: var(--accent-soft);
+  color: var(--accent); background: var(--accent-soft);
   border: 1px solid #FDE68A;
   padding: 3px 10px; border-radius: 100px;
 }
 
-/* ────────────────────────────────────────
-   HERO STRIP
-──────────────────────────────────────── */
+/* ─────────────────────────────────────
+   HERO
+───────────────────────────────────── */
 .hero-strip {
   background: var(--brand);
   padding: 48px 32px 52px;
   position: relative; overflow: hidden;
   opacity: 0; animation: fadeUp 0.6s 0.1s var(--ease) forwards;
 }
-
-/* subtle texture */
 .hero-strip::before {
   content: '';
   position: absolute; inset: 0; pointer-events: none;
@@ -217,133 +171,68 @@ body {
     radial-gradient(ellipse 70% 80% at 80% 50%, rgba(217,119,6,0.12) 0%, transparent 60%),
     radial-gradient(ellipse 40% 60% at 10% 100%, rgba(255,255,255,0.03) 0%, transparent 50%);
 }
-
-/* grid dots */
 .hero-strip::after {
   content: '';
   position: absolute; inset: 0; pointer-events: none; opacity: 0.15;
   background-image: radial-gradient(circle, rgba(255,255,255,0.35) 1px, transparent 1px);
   background-size: 24px 24px;
 }
-
 .hero-inner {
   max-width: 1120px; margin: 0 auto;
   position: relative; z-index: 1;
   display: flex; align-items: flex-end; justify-content: space-between;
   gap: 32px; flex-wrap: wrap;
 }
-
 .hero-eyebrow {
   display: inline-flex; align-items: center; gap: 6px;
-  font-size: 11px; font-weight: 500; letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: rgba(254,243,199,0.6);
-  margin-bottom: 14px;
+  font-size: 11px; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase;
+  color: rgba(254,243,199,0.6); margin-bottom: 14px;
 }
-.hero-eyebrow-dot {
-  width: 5px; height: 5px; border-radius: 50%;
-  background: var(--accent-mid); opacity: 0.8;
-}
-
+.hero-eyebrow-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--accent-mid); opacity: 0.8; }
 .hero-title {
   font-family: var(--font-serif);
-  font-size: clamp(2rem, 4vw, 3rem);
-  font-style: italic;
-  color: var(--white);
-  line-height: 1.12;
-  letter-spacing: -0.02em;
-  margin-bottom: 12px;
+  font-size: clamp(2rem, 4vw, 3rem); font-style: italic;
+  color: var(--white); line-height: 1.12; letter-spacing: -0.02em; margin-bottom: 12px;
 }
 .hero-title strong {
-  font-style: normal;
-  font-family: var(--font-sans);
-  font-weight: 300;
-  font-size: 0.52em;
-  display: block;
-  letter-spacing: 0.04em;
-  color: rgba(255,255,255,0.45);
-  text-transform: uppercase;
-  margin-bottom: 6px;
+  font-style: normal; font-family: var(--font-sans); font-weight: 300; font-size: 0.52em;
+  display: block; letter-spacing: 0.04em; color: rgba(255,255,255,0.45);
+  text-transform: uppercase; margin-bottom: 6px;
 }
+.hero-desc { font-size: 14px; color: rgba(255,255,255,0.5); max-width: 420px; line-height: 1.6; }
+.hero-stats { display: flex; gap: 32px; flex-wrap: wrap; padding-bottom: 4px; }
+.hero-stat-value { font-size: 26px; font-weight: 600; letter-spacing: -0.03em; color: var(--white); line-height: 1; margin-bottom: 3px; }
+.hero-stat-label { font-size: 11px; color: rgba(255,255,255,0.4); font-weight: 400; letter-spacing: 0.03em; }
 
-.hero-desc {
-  font-size: 14px; font-weight: 400;
-  color: rgba(255,255,255,0.5);
-  max-width: 420px; line-height: 1.6;
-}
-
-.hero-stats {
-  display: flex; gap: 32px; flex-wrap: wrap;
-  padding-bottom: 4px;
-}
-.hero-stat-value {
-  font-size: 26px; font-weight: 600; letter-spacing: -0.03em;
-  color: var(--white); line-height: 1;
-  margin-bottom: 3px;
-}
-.hero-stat-label {
-  font-size: 11px; color: rgba(255,255,255,0.4);
-  font-weight: 400; letter-spacing: 0.03em;
-}
-
-/* ────────────────────────────────────────
-   LAYOUT
-──────────────────────────────────────── */
-.page-body {
-  max-width: 1120px; margin: 0 auto;
-  padding: 40px 32px 100px;
-}
-
-/* tab panels */
+/* ─────────────────────────────────────
+   PAGE BODY
+───────────────────────────────────── */
+.page-body { max-width: 1120px; margin: 0 auto; padding: 40px 32px 100px; }
 .tab-panel { display: none; }
 .tab-panel.active { display: block; animation: fadeUp 0.35s var(--ease); }
 
-/* ────────────────────────────────────────
+/* ─────────────────────────────────────
    SECTION
-──────────────────────────────────────── */
+───────────────────────────────────── */
 .section { margin-bottom: 56px; }
-
-.section-head {
-  display: flex; align-items: center; justify-content: space-between;
-  margin-bottom: 20px;
-}
-
+.section-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
 .section-title {
-  font-size: 13px; font-weight: 600; letter-spacing: -0.01em;
-  color: var(--gray-900);
+  font-size: 13px; font-weight: 600; letter-spacing: -0.01em; color: var(--gray-900);
   display: flex; align-items: center; gap: 8px;
 }
 .section-title-tag {
-  font-size: 11px; font-weight: 500;
-  color: var(--text-muted);
-  background: var(--gray-100);
-  border: 1px solid var(--border);
+  font-size: 11px; font-weight: 500; color: var(--text-muted);
+  background: var(--gray-100); border: 1px solid var(--border);
   padding: 1px 7px; border-radius: 100px;
 }
-.section-action {
-  font-size: 12px; font-weight: 500; color: var(--accent);
-  background: none; border: none;
-  display: flex; align-items: center; gap: 4px;
-  padding: 4px 0;
-  transition: opacity 0.15s;
-}
-.section-action:hover { opacity: 0.75; }
 
-/* ────────────────────────────────────────
+/* ─────────────────────────────────────
    VIDEO GRID
-──────────────────────────────────────── */
-.video-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  gap: 16px;
-}
-
+───────────────────────────────────── */
+.video-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; }
 .video-card {
-  background: var(--white);
-  border: 1px solid var(--border);
-  border-radius: var(--r-lg);
-  overflow: hidden;
-  box-shadow: var(--shadow-sm);
+  background: var(--white); border: 1px solid var(--border); border-radius: var(--r-lg);
+  overflow: hidden; box-shadow: var(--shadow-sm);
   transition: box-shadow 0.25s var(--ease), transform 0.25s var(--ease), border-color 0.2s;
   opacity: 0; animation: fadeUp 0.5s var(--ease) forwards;
 }
@@ -351,511 +240,334 @@ body {
 .video-card:nth-child(2){animation-delay:.14s}
 .video-card:nth-child(3){animation-delay:.20s}
 .video-card:nth-child(4){animation-delay:.26s}
-
-.video-card:hover {
-  box-shadow: var(--shadow-lg);
-  transform: translateY(-2px);
-  border-color: var(--gray-300);
-}
-
+.video-card:hover { box-shadow: var(--shadow-lg); transform: translateY(-2px); border-color: var(--gray-300); }
 .video-card-top {
   padding: 12px 14px 10px;
   display: flex; align-items: center; justify-content: space-between;
   border-bottom: 1px solid var(--border-soft);
 }
 .video-card-label {
-  font-size: 11px; font-weight: 600; letter-spacing: 0.03em;
-  color: var(--gray-700);
+  font-size: 11px; font-weight: 600; letter-spacing: 0.03em; color: var(--gray-700);
   display: flex; align-items: center; gap: 6px;
 }
-.video-card-label::before {
-  content: '';
-  width: 6px; height: 6px; border-radius: 50%;
-  background: var(--accent);
-}
-.video-card-badge {
-  font-size: 10px; font-weight: 500;
-  color: var(--text-muted); letter-spacing: 0.02em;
-}
+.video-card-label::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
+.video-card-badge { font-size: 10px; font-weight: 500; color: var(--text-muted); letter-spacing: 0.02em; }
+.video-wrapper { position: relative; padding-top: 56.25%; }
+.video-wrapper iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: none; }
 
-.video-wrapper {
-  position: relative; padding-top: 56.25%;
-}
-.video-wrapper iframe {
-  position: absolute; inset: 0;
-  width: 100%; height: 100%; border: none;
-}
-
-/* ────────────────────────────────────────
-   LINKS
-──────────────────────────────────────── */
-.links-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  gap: 12px;
-  list-style: none;
-}
-
-.link-card {
-  opacity: 0; animation: fadeUp 0.5s var(--ease) forwards;
-}
+/* ─────────────────────────────────────
+   LINKS GRID
+───────────────────────────────────── */
+.links-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; list-style: none; }
+.link-card { opacity: 0; animation: fadeUp 0.5s var(--ease) forwards; }
 .link-card:nth-child(1){animation-delay:.06s}
 .link-card:nth-child(2){animation-delay:.12s}
 .link-card:nth-child(3){animation-delay:.18s}
 .link-card:nth-child(4){animation-delay:.24s}
-
 .link-card a {
   display: flex; align-items: center; gap: 14px;
-  padding: 16px 18px;
-  background: var(--white);
-  border: 1px solid var(--border);
-  border-radius: var(--r-md);
-  text-decoration: none;
-  box-shadow: var(--shadow-xs);
+  padding: 16px 18px; background: var(--white);
+  border: 1px solid var(--border); border-radius: var(--r-md);
+  text-decoration: none; box-shadow: var(--shadow-xs);
   transition: box-shadow 0.2s, border-color 0.2s, transform 0.2s var(--ease);
-  group: true;
 }
-.link-card a:hover {
-  box-shadow: var(--shadow-md);
-  border-color: var(--gray-300);
-  transform: translateY(-1px);
-}
-
+.link-card a:hover { box-shadow: var(--shadow-md); border-color: var(--gray-300); transform: translateY(-1px); }
 .link-icon-box {
   width: 36px; height: 36px; flex-shrink: 0;
-  background: var(--gray-50);
-  border: 1px solid var(--border);
-  border-radius: var(--r-sm);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 16px;
+  background: var(--gray-50); border: 1px solid var(--border); border-radius: var(--r-sm);
+  display: flex; align-items: center; justify-content: center; font-size: 16px;
   transition: background 0.2s;
 }
 .link-card a:hover .link-icon-box { background: var(--accent-pale); border-color: #FDE68A; }
-
-.link-text strong {
-  display: block;
-  font-size: 13px; font-weight: 600;
-  color: var(--gray-900); letter-spacing: -0.01em;
-  margin-bottom: 1px;
-}
-.link-text small {
-  font-size: 11.5px; color: var(--text-muted); font-weight: 400;
-}
-
-.link-arrow {
-  margin-left: auto; flex-shrink: 0;
-  font-size: 14px; color: var(--gray-300);
-  transition: color 0.2s, transform 0.2s;
-}
+.link-text strong { display: block; font-size: 13px; font-weight: 600; color: var(--gray-900); letter-spacing: -0.01em; margin-bottom: 1px; }
+.link-text small  { font-size: 11.5px; color: var(--text-muted); font-weight: 400; }
+.link-arrow { margin-left: auto; flex-shrink: 0; font-size: 14px; color: var(--gray-300); transition: color 0.2s, transform 0.2s; }
 .link-card a:hover .link-arrow { color: var(--accent); transform: translateX(2px); }
 
-/* ────────────────────────────────────────
+/* ─────────────────────────────────────
    SHARE
-──────────────────────────────────────── */
-.share-layout {
-  max-width: 480px; margin: 0 auto;
-}
-
-.share-card {
-  background: var(--white);
-  border: 1px solid var(--border);
-  border-radius: var(--r-xl);
-  overflow: hidden;
-  box-shadow: var(--shadow-md);
-}
-
+───────────────────────────────────── */
+.share-layout { max-width: 480px; margin: 0 auto; }
+.share-card { background: var(--white); border: 1px solid var(--border); border-radius: var(--r-xl); overflow: hidden; box-shadow: var(--shadow-md); }
 .share-hero {
-  padding: 40px 40px 32px;
-  background: var(--brand);
-  text-align: center;
-  position: relative; overflow: hidden;
+  padding: 40px 40px 32px; background: var(--brand);
+  text-align: center; position: relative; overflow: hidden;
 }
 .share-hero::after {
-  content: '';
-  position: absolute; inset: 0; pointer-events: none;
+  content: ''; position: absolute; inset: 0; pointer-events: none;
   background-image: radial-gradient(circle, rgba(255,255,255,0.12) 1px, transparent 1px);
-  background-size: 20px 20px;
-  opacity: 0.6;
+  background-size: 20px 20px; opacity: 0.6;
 }
-.share-hero-icon {
-  font-size: 32px; margin-bottom: 16px;
-  position: relative; z-index: 1;
-}
-.share-hero h2 {
-  font-family: var(--font-serif);
-  font-size: 1.7rem; font-style: italic;
-  color: var(--white); letter-spacing: -0.02em;
-  margin-bottom: 6px;
-  position: relative; z-index: 1;
-}
-.share-hero p {
-  font-size: 13px; color: rgba(255,255,255,0.5);
-  position: relative; z-index: 1;
-}
-
-.share-body {
-  padding: 36px 40px;
-  display: flex; flex-direction: column; align-items: center; gap: 20px;
-}
-
-#qrcode {
-  padding: 12px; background: white;
-  border: 1px solid var(--border);
-  border-radius: var(--r-md);
-  box-shadow: var(--shadow-sm);
-}
-
-.share-url-box {
-  width: 100%;
-  display: flex; align-items: center; gap: 0;
-  border: 1px solid var(--border);
-  border-radius: var(--r-sm); overflow: hidden;
-  background: var(--gray-50);
-}
-.share-url-text {
-  flex: 1; padding: 9px 12px;
-  font-size: 12px; color: var(--text-muted);
-  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-}
-.copy-btn {
-  padding: 9px 14px;
-  background: var(--white);
-  border: none; border-left: 1px solid var(--border);
-  font-size: 11.5px; font-weight: 500;
-  color: var(--gray-700);
-  transition: background 0.15s;
-  flex-shrink: 0;
-}
+.share-hero-icon { font-size: 32px; margin-bottom: 16px; position: relative; z-index: 1; }
+.share-hero h2 { font-family: var(--font-serif); font-size: 1.7rem; font-style: italic; color: var(--white); letter-spacing: -0.02em; margin-bottom: 6px; position: relative; z-index: 1; }
+.share-hero p  { font-size: 13px; color: rgba(255,255,255,0.5); position: relative; z-index: 1; }
+.share-body { padding: 36px 40px; display: flex; flex-direction: column; align-items: center; gap: 20px; }
+#qrcode { padding: 12px; background: white; border: 1px solid var(--border); border-radius: var(--r-md); box-shadow: var(--shadow-sm); }
+.share-url-box { width: 100%; display: flex; align-items: center; border: 1px solid var(--border); border-radius: var(--r-sm); overflow: hidden; background: var(--gray-50); }
+.share-url-text { flex: 1; padding: 9px 12px; font-size: 12px; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.copy-btn { padding: 9px 14px; background: var(--white); border: none; border-left: 1px solid var(--border); font-size: 11.5px; font-weight: 500; color: var(--gray-700); transition: background 0.15s; flex-shrink: 0; }
 .copy-btn:hover { background: var(--gray-100); }
-
-.share-credit {
-  font-size: 11px; color: var(--text-faint); text-align: center;
-}
+.share-credit { font-size: 11px; color: var(--text-faint); text-align: center; }
 .share-credit strong { color: var(--gray-500); }
 
-/* ────────────────────────────────────────
-   SUGGESTIONS LAYOUT
-──────────────────────────────────────── */
-.suggestions-layout {
-  display: grid;
-  grid-template-columns: 400px 1fr;
-  gap: 24px; align-items: start;
-}
-@media (max-width: 900px) {
-  .suggestions-layout { grid-template-columns: 1fr; }
-}
+/* ─────────────────────────────────────
+   SUGGESTIONS
+───────────────────────────────────── */
+.suggestions-layout { display: grid; grid-template-columns: 400px 1fr; gap: 24px; align-items: start; }
+@media (max-width: 900px) { .suggestions-layout { grid-template-columns: 1fr; } }
 
-/* ── Form ── */
-.form-card {
-  background: var(--white);
-  border: 1px solid var(--border);
-  border-radius: var(--r-xl);
-  overflow: hidden;
-  box-shadow: var(--shadow-sm);
-}
-
-.form-card-head {
-  padding: 22px 26px 18px;
-  border-bottom: 1px solid var(--border);
-}
-.form-card-head h3 {
-  font-size: 14px; font-weight: 600; letter-spacing: -0.01em;
-  color: var(--gray-900); margin-bottom: 3px;
-}
-.form-card-head p {
-  font-size: 12.5px; color: var(--text-muted);
-}
-
+.form-card { background: var(--white); border: 1px solid var(--border); border-radius: var(--r-xl); overflow: hidden; box-shadow: var(--shadow-sm); }
+.form-card-head { padding: 22px 26px 18px; border-bottom: 1px solid var(--border); }
+.form-card-head h3 { font-size: 14px; font-weight: 600; letter-spacing: -0.01em; color: var(--gray-900); margin-bottom: 3px; }
+.form-card-head p  { font-size: 12.5px; color: var(--text-muted); }
 .form-body { padding: 22px 26px 26px; }
 
 .field { margin-bottom: 16px; }
-.field label {
-  display: block;
-  font-size: 12px; font-weight: 500;
-  color: var(--gray-700); letter-spacing: 0.01em;
-  margin-bottom: 6px;
+.field label { display: block; font-size: 12px; font-weight: 500; color: var(--gray-700); letter-spacing: 0.01em; margin-bottom: 6px; }
+.field-hint  { font-size: 11px; font-weight: 400; color: var(--text-muted); margin-left: 4px; }
+.field input, .field textarea, .field select {
+  width: 100%; background: var(--white); border: 1px solid var(--border); border-radius: var(--r-sm);
+  padding: 9px 12px; font-size: 13.5px; color: var(--gray-900); outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s; -webkit-appearance: none; appearance: none; resize: vertical;
 }
-.field-hint { font-size: 11px; font-weight: 400; color: var(--text-muted); margin-left: 4px; }
-
-.field input,
-.field textarea,
-.field select {
-  width: 100%;
-  background: var(--white);
-  border: 1px solid var(--border);
-  border-radius: var(--r-sm);
-  padding: 9px 12px;
-  font-size: 13.5px; color: var(--gray-900);
-  outline: none;
-  transition: border-color 0.15s, box-shadow 0.15s;
-  -webkit-appearance: none;
-  appearance: none;
-  resize: vertical;
-}
-.field input::placeholder,
-.field textarea::placeholder { color: var(--text-faint); }
-.field input:hover,
-.field textarea:hover,
-.field select:hover { border-color: var(--gray-300); }
-.field input:focus,
-.field textarea:focus,
-.field select:focus {
-  border-color: var(--accent);
-  box-shadow: var(--shadow-focus);
-}
+.field input::placeholder, .field textarea::placeholder { color: var(--text-faint); }
+.field input:hover, .field textarea:hover, .field select:hover { border-color: var(--gray-300); }
+.field input:focus, .field textarea:focus, .field select:focus { border-color: var(--accent); box-shadow: var(--shadow-focus); }
 .field textarea { min-height: 100px; line-height: 1.55; }
-
 .select-wrap { position: relative; }
-.select-wrap::after {
-  content: '↓';
-  position: absolute; right: 11px; top: 50%; transform: translateY(-50%);
-  font-size: 11px; color: var(--text-muted); pointer-events: none;
-}
-
-.char-counter {
-  margin-top: 4px; text-align: right;
-  font-size: 11px; color: var(--text-faint);
-}
+.select-wrap::after { content: '↓'; position: absolute; right: 11px; top: 50%; transform: translateY(-50%); font-size: 11px; color: var(--text-muted); pointer-events: none; }
+.char-counter { margin-top: 4px; text-align: right; font-size: 11px; color: var(--text-faint); }
 .char-counter.warn { color: var(--accent); }
 .char-counter.over { color: var(--error); }
 
 .submit-btn {
-  width: 100%; margin-top: 4px;
-  background: var(--brand);
-  color: var(--white);
-  border: none; border-radius: var(--r-sm);
-  padding: 11px 20px;
+  width: 100%; margin-top: 4px; background: var(--brand); color: var(--white);
+  border: none; border-radius: var(--r-sm); padding: 11px 20px;
   font-size: 13px; font-weight: 500; letter-spacing: 0.01em;
   transition: background 0.15s, transform 0.15s var(--ease), box-shadow 0.15s;
 }
-.submit-btn:hover:not(:disabled) {
-  background: var(--brand-2);
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.18);
-}
+.submit-btn:hover:not(:disabled) { background: var(--brand-2); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,0,0,0.18); }
 .submit-btn:active:not(:disabled) { transform: translateY(0); }
 .submit-btn:disabled { opacity: 0.45; cursor: not-allowed; }
 
-.toast {
-  margin-top: 12px; padding: 10px 14px;
-  border-radius: var(--r-sm);
-  font-size: 12.5px; font-weight: 500;
-  display: none; line-height: 1.4;
-}
+.toast { margin-top: 12px; padding: 10px 14px; border-radius: var(--r-sm); font-size: 12.5px; font-weight: 500; display: none; line-height: 1.4; }
 .toast.success { background: var(--success-bg); color: var(--success); border: 1px solid #BBF7D0; }
 .toast.error   { background: var(--error-bg);   color: var(--error);   border: 1px solid #FECDD3; }
 
-/* ── Feed ── */
-.feed-card {
-  background: var(--white);
-  border: 1px solid var(--border);
-  border-radius: var(--r-xl);
-  overflow: hidden;
-  box-shadow: var(--shadow-sm);
-}
-
-.feed-card-head {
-  padding: 18px 22px;
-  border-bottom: 1px solid var(--border);
-  display: flex; align-items: center; justify-content: space-between;
-}
-.feed-card-head h3 {
-  font-size: 14px; font-weight: 600;
-  color: var(--gray-900); letter-spacing: -0.01em;
-  display: flex; align-items: center; gap: 8px;
-}
-.feed-count {
-  font-size: 11px; font-weight: 500;
-  color: var(--text-muted);
-  background: var(--gray-100);
-  border: 1px solid var(--border);
-  padding: 1px 7px; border-radius: 100px;
-}
-
-.refresh-btn {
-  display: flex; align-items: center; gap: 5px;
-  padding: 6px 12px; border-radius: var(--r-sm);
-  border: 1px solid var(--border);
-  background: var(--white);
-  font-size: 12px; font-weight: 500;
-  color: var(--text-muted);
-  transition: all 0.15s;
-}
-.refresh-btn:hover {
-  border-color: var(--gray-300);
-  color: var(--gray-700);
-  background: var(--gray-50);
-}
-
+.feed-card { background: var(--white); border: 1px solid var(--border); border-radius: var(--r-xl); overflow: hidden; box-shadow: var(--shadow-sm); }
+.feed-card-head { padding: 18px 22px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+.feed-card-head h3 { font-size: 14px; font-weight: 600; color: var(--gray-900); letter-spacing: -0.01em; display: flex; align-items: center; gap: 8px; }
+.feed-count { font-size: 11px; font-weight: 500; color: var(--text-muted); background: var(--gray-100); border: 1px solid var(--border); padding: 1px 7px; border-radius: 100px; }
+.refresh-btn { display: flex; align-items: center; gap: 5px; padding: 6px 12px; border-radius: var(--r-sm); border: 1px solid var(--border); background: var(--white); font-size: 12px; font-weight: 500; color: var(--text-muted); transition: all 0.15s; }
+.refresh-btn:hover { border-color: var(--gray-300); color: var(--gray-700); background: var(--gray-50); }
 .feed-list { padding: 0; }
-
-.suggestion-item {
-  padding: 18px 22px;
-  border-bottom: 1px solid var(--border-soft);
-  transition: background 0.15s;
-  animation: fadeUp 0.35s var(--ease);
-}
+.suggestion-item { padding: 18px 22px; border-bottom: 1px solid var(--border-soft); transition: background 0.15s; animation: fadeUp 0.35s var(--ease); }
 .suggestion-item:last-child { border-bottom: none; }
 .suggestion-item:hover { background: var(--gray-50); }
-
-.sug-header {
-  display: flex; align-items: center; gap: 10px; margin-bottom: 9px;
-}
-.sug-avatar {
-  width: 28px; height: 28px; border-radius: 50%; flex-shrink: 0;
-  background: var(--brand);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 11px; font-weight: 600; color: rgba(255,255,255,0.8);
-  letter-spacing: 0;
-}
+.sug-header { display: flex; align-items: center; gap: 10px; margin-bottom: 9px; }
+.sug-avatar { width: 28px; height: 28px; border-radius: 50%; flex-shrink: 0; background: var(--brand); display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 600; color: rgba(255,255,255,0.8); }
 .sug-meta { flex: 1; min-width: 0; }
-.sug-name {
-  font-size: 12.5px; font-weight: 600;
-  color: var(--gray-800); line-height: 1;
-}
-.sug-date {
-  font-size: 11px; color: var(--text-faint); margin-top: 1px;
-}
-.sug-tag {
-  font-size: 10.5px; font-weight: 500;
-  color: var(--accent); letter-spacing: 0.01em;
-  background: var(--accent-soft);
-  border: 1px solid #FDE68A;
-  padding: 2px 8px; border-radius: 100px;
-  flex-shrink: 0;
-}
-
-.sug-text {
-  font-size: 13px; color: var(--gray-600); line-height: 1.6;
-}
-.sug-link {
-  display: inline-flex; align-items: center; gap: 4px;
-  margin-top: 8px;
-  font-size: 12px; font-weight: 500;
-  color: var(--accent); text-decoration: none;
-  border-bottom: 1px solid transparent;
-  transition: border-color 0.15s;
-}
+.sug-name { font-size: 12.5px; font-weight: 600; color: var(--gray-800); line-height: 1; }
+.sug-date { font-size: 11px; color: var(--text-faint); margin-top: 1px; }
+.sug-tag  { font-size: 10.5px; font-weight: 500; color: var(--accent); background: var(--accent-soft); border: 1px solid #FDE68A; padding: 2px 8px; border-radius: 100px; flex-shrink: 0; }
+.sug-text { font-size: 13px; color: var(--gray-600); line-height: 1.6; }
+.sug-link { display: inline-flex; align-items: center; gap: 4px; margin-top: 8px; font-size: 12px; font-weight: 500; color: var(--accent); text-decoration: none; border-bottom: 1px solid transparent; transition: border-color 0.15s; }
 .sug-link:hover { border-color: var(--accent); }
-
-.feed-empty, .feed-loading {
-  padding: 48px 24px; text-align: center;
-  color: var(--text-muted); font-size: 13px;
-}
+.feed-empty, .feed-loading { padding: 48px 24px; text-align: center; color: var(--text-muted); font-size: 13px; }
 .feed-empty-icon { font-size: 28px; margin-bottom: 10px; }
+.spinner { display: inline-block; width: 14px; height: 14px; border: 1.5px solid var(--border); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.7s linear infinite; vertical-align: middle; margin-right: 7px; }
 
-.spinner {
-  display: inline-block; width: 14px; height: 14px;
-  border: 1.5px solid var(--border);
-  border-top-color: var(--accent);
-  border-radius: 50%;
-  animation: spin 0.7s linear infinite;
-  vertical-align: middle; margin-right: 7px;
-}
+/* ─────────────────────────────────────
+   FOOTER
+───────────────────────────────────── */
+.site-footer { background: var(--gray-50); border-top: 1px solid var(--border); padding: 28px 32px; }
+.footer-inner { max-width: 1120px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+.footer-left  { display: flex; align-items: center; gap: 10px; }
+.footer-logo  { width: 24px; height: 24px; background: var(--brand); border-radius: 5px; display: flex; align-items: center; justify-content: center; font-size: 11px; }
+.footer-copy  { font-size: 12px; color: var(--text-muted); }
+.footer-copy strong { color: var(--gray-700); }
+.footer-right { font-size: 11.5px; color: var(--text-faint); }
+.footer-link  { color: var(--accent); text-decoration: none; border-bottom: 1px solid transparent; transition: border-color 0.15s; font-size: 11.5px; }
+.footer-link:hover { border-color: var(--accent); }
 
-/* ────────────────────────────────────────
+/* ─────────────────────────────────────
    PRIVACY BANNER
-──────────────────────────────────────── */
+───────────────────────────────────── */
 #privacy-banner {
   position: fixed; bottom: 16px; left: 50%; transform: translateX(-50%) translateY(120px);
-  z-index: 1000;
-  width: calc(100% - 32px); max-width: 640px;
-  background: var(--gray-900);
-  border: 1px solid rgba(255,255,255,0.07);
-  border-radius: var(--r-lg);
-  box-shadow: var(--shadow-lg);
-  padding: 16px 20px;
-  display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+  z-index: 1000; width: calc(100% - 32px); max-width: 640px;
+  background: var(--gray-900); border: 1px solid rgba(255,255,255,0.07);
+  border-radius: var(--r-lg); box-shadow: var(--shadow-lg);
+  padding: 16px 20px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
   animation: slideUpBanner 0.45s 2s var(--ease) forwards;
 }
-#privacy-banner p {
-  flex: 1; min-width: 180px;
-  font-size: 12.5px; color: rgba(255,255,255,0.6); line-height: 1.5;
-}
-#privacy-banner a { color: rgba(255,255,255,0.85); text-decoration: underline; text-decoration-color: rgba(255,255,255,0.25); }
-.btn-accept {
-  background: var(--white); color: var(--gray-900);
-  border: none; border-radius: var(--r-sm);
-  padding: 8px 18px;
-  font-size: 12.5px; font-weight: 600;
-  transition: background 0.15s;
-  flex-shrink: 0;
-}
+#privacy-banner p { flex: 1; min-width: 180px; font-size: 12.5px; color: rgba(255,255,255,0.6); line-height: 1.5; }
+#privacy-banner a { color: rgba(255,255,255,0.85); text-decoration: underline; text-decoration-color: rgba(255,255,255,0.2); cursor: pointer; }
+.btn-accept { background: var(--white); color: var(--gray-900); border: none; border-radius: var(--r-sm); padding: 8px 18px; font-size: 12.5px; font-weight: 600; transition: background 0.15s; flex-shrink: 0; }
 .btn-accept:hover { background: var(--gray-100); }
 
-/* ────────────────────────────────────────
-   FOOTER
-──────────────────────────────────────── */
-.site-footer {
-  background: var(--gray-50);
-  border-top: 1px solid var(--border);
-  padding: 28px 32px;
+/* ═══════════════════════════════════════
+   POLÍTICA DE PRIVACIDADE — view
+═══════════════════════════════════════ */
+
+/* back breadcrumb */
+.pp-back {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 7px 14px; background: var(--white);
+  border: 1px solid var(--border); border-radius: var(--r-sm);
+  font-size: 12.5px; font-weight: 500; color: var(--gray-700);
+  text-decoration: none; cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, transform 0.15s var(--ease);
+  box-shadow: var(--shadow-xs);
 }
-.footer-inner {
-  max-width: 1120px; margin: 0 auto;
-  display: flex; align-items: center; justify-content: space-between;
-  flex-wrap: wrap; gap: 12px;
+.pp-back:hover { background: var(--gray-50); border-color: var(--gray-300); transform: translateX(-2px); }
+
+/* doc hero */
+.doc-hero {
+  background: var(--brand); padding: 56px 32px 60px;
+  position: relative; overflow: hidden;
+  animation: fadeUp 0.5s 0.05s var(--ease) both;
 }
-.footer-left {
-  display: flex; align-items: center; gap: 10px;
+.doc-hero::before {
+  content: ''; position: absolute; inset: 0; pointer-events: none;
+  background: radial-gradient(ellipse 60% 80% at 90% 50%, rgba(217,119,6,0.14) 0%, transparent 60%);
 }
-.footer-logo {
-  width: 24px; height: 24px;
-  background: var(--brand);
-  border-radius: 5px;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 11px;
+.doc-hero::after {
+  content: ''; position: absolute; inset: 0; pointer-events: none;
+  background-image: radial-gradient(circle, rgba(255,255,255,0.12) 1px, transparent 1px);
+  background-size: 24px 24px; opacity: 0.25;
 }
-.footer-copy {
-  font-size: 12px; color: var(--text-muted);
+.doc-hero-inner { max-width: 800px; margin: 0 auto; position: relative; z-index: 1; }
+.doc-eyebrow {
+  display: inline-flex; align-items: center; gap: 7px;
+  font-size: 11px; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase;
+  color: rgba(254,243,199,0.55); margin-bottom: 16px;
 }
-.footer-copy strong { color: var(--gray-700); }
-.footer-right {
-  font-size: 11.5px; color: var(--text-faint);
+.doc-eyebrow-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--accent-mid); }
+.doc-hero h1 {
+  font-family: var(--font-serif); font-style: italic;
+  font-size: clamp(1.9rem, 4vw, 2.9rem);
+  color: var(--white); letter-spacing: -0.02em; line-height: 1.1; margin-bottom: 14px;
+}
+.doc-hero h1 small {
+  font-style: normal; font-family: var(--font-sans); font-weight: 300; font-size: 0.5em;
+  display: block; letter-spacing: 0.06em; text-transform: uppercase;
+  color: rgba(255,255,255,0.35); margin-bottom: 6px;
+}
+.doc-meta { display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }
+.doc-meta-item { display: flex; align-items: center; gap: 6px; font-size: 12px; color: rgba(255,255,255,0.4); }
+.doc-meta-item span { font-weight: 500; color: rgba(255,255,255,0.65); }
+.doc-meta-sep { color: rgba(255,255,255,0.15); }
+
+/* doc layout */
+.doc-layout {
+  max-width: 1100px; margin: 0 auto; padding: 56px 32px 100px;
+  display: grid; grid-template-columns: 220px 1fr; gap: 48px; align-items: start;
 }
 
-/* ────────────────────────────────────────
+/* sidebar */
+.doc-sidebar { position: sticky; top: 80px; animation: fadeUp 0.5s 0.15s var(--ease) both; }
+.sidebar-label { font-size: 10.5px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-faint); margin-bottom: 10px; padding-left: 2px; }
+.toc-list { list-style: none; display: flex; flex-direction: column; gap: 1px; }
+.toc-list li a {
+  display: block; padding: 6px 10px; border-radius: var(--r-sm);
+  font-size: 12.5px; color: var(--text-muted); text-decoration: none;
+  transition: background 0.15s, color 0.15s; border-left: 2px solid transparent; cursor: pointer;
+}
+.toc-list li a:hover { background: var(--gray-100); color: var(--gray-800); border-left-color: var(--gray-300); }
+.toc-list li a.toc-active { background: var(--accent-pale); color: var(--accent); border-left-color: var(--accent); font-weight: 500; }
+.sidebar-sep { height: 1px; background: var(--border); margin: 16px 0; }
+.sidebar-info { padding: 14px; background: var(--gray-50); border: 1px solid var(--border); border-radius: var(--r-md); font-size: 11.5px; color: var(--text-muted); line-height: 1.55; }
+.sidebar-info strong { color: var(--gray-700); }
+
+/* content */
+.doc-content { min-width: 0; animation: fadeUp 0.5s 0.1s var(--ease) both; }
+
+.intro-notice {
+  padding: 18px 20px; background: var(--accent-pale);
+  border: 1px solid #FDE68A; border-radius: var(--r-lg);
+  margin-bottom: 48px; display: flex; gap: 12px;
+  font-size: 13.5px; color: #78350F; line-height: 1.65;
+}
+.intro-notice-icon { font-size: 17px; flex-shrink: 0; margin-top: 1px; }
+
+.pp-section { margin-bottom: 52px; scroll-margin-top: 90px; }
+.pp-section-num { font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-faint); margin-bottom: 6px; }
+.pp-section h2 {
+  font-family: var(--font-serif); font-size: 1.5rem; font-style: italic;
+  color: var(--gray-900); letter-spacing: -0.02em; line-height: 1.2;
+  margin-bottom: 20px; padding-bottom: 16px; border-bottom: 1px solid var(--border);
+}
+.pp-section p { font-size: 14px; color: var(--gray-700); line-height: 1.75; margin-bottom: 14px; }
+.pp-section p:last-child { margin-bottom: 0; }
+.pp-section ul, .pp-section ol { margin: 12px 0 16px; padding-left: 0; list-style: none; display: flex; flex-direction: column; gap: 8px; }
+.pp-section ul li, .pp-section ol li { display: flex; align-items: flex-start; gap: 10px; font-size: 14px; color: var(--gray-700); line-height: 1.65; }
+.pp-section ul li::before { content: '—'; color: var(--accent-mid); font-weight: 600; flex-shrink: 0; margin-top: 1px; font-size: 12px; }
+.pp-section ol { counter-reset: item; }
+.pp-section ol li { counter-increment: item; }
+.pp-section ol li::before { content: counter(item, decimal-leading-zero); color: var(--text-faint); font-size: 11px; font-weight: 600; flex-shrink: 0; min-width: 22px; padding-top: 3px; }
+
+.info-box { padding: 14px 16px; border-radius: var(--r-md); margin: 18px 0; display: flex; gap: 10px; font-size: 13.5px; line-height: 1.65; }
+.info-box-icon { font-size: 15px; flex-shrink: 0; margin-top: 1px; }
+.info-box.note { background: var(--gray-50); border: 1px solid var(--border); color: var(--gray-700); }
+.info-box.warn { background: var(--accent-pale); border: 1px solid #FDE68A; color: #78350F; }
+.info-box.ok   { background: #F0FDF4; border: 1px solid #BBF7D0; color: #14532D; }
+
+.pp-table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 13px; }
+.pp-table thead th { text-align: left; padding: 10px 14px; background: var(--gray-50); border: 1px solid var(--border); font-size: 11px; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; color: var(--text-muted); }
+.pp-table tbody td { padding: 11px 14px; border: 1px solid var(--border); color: var(--gray-700); vertical-align: top; line-height: 1.55; }
+.pp-table tbody tr:hover td { background: var(--gray-50); }
+
+.contact-card { background: var(--brand); border-radius: var(--r-xl); padding: 32px 36px; margin-top: 20px; position: relative; overflow: hidden; }
+.contact-card::after { content: ''; position: absolute; inset: 0; pointer-events: none; background-image: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px); background-size: 20px 20px; opacity: 0.35; }
+.contact-card-inner { position: relative; z-index: 1; }
+.contact-card h3 { font-family: var(--font-serif); font-style: italic; font-size: 1.3rem; color: var(--white); letter-spacing: -0.01em; margin-bottom: 8px; }
+.contact-card p  { font-size: 13px; color: rgba(255,255,255,0.5); line-height: 1.65; margin-bottom: 20px; }
+.contact-row { display: flex; align-items: center; gap: 10px; padding: 10px 14px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: var(--r-sm); font-size: 13px; color: rgba(255,255,255,0.7); margin-bottom: 8px; }
+.contact-row:last-child { margin-bottom: 0; }
+.contact-row strong { color: rgba(255,255,255,0.9); }
+
+.pp-sep { height: 1px; background: var(--border); margin: 0 0 52px; }
+
+strong { font-weight: 600; color: var(--gray-800); }
+
+/* ─────────────────────────────────────
    ANIMATIONS
-──────────────────────────────────────── */
-@keyframes fadeDown {
-  from { opacity: 0; transform: translateY(-10px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(12px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-@keyframes slideUpBanner {
-  to { transform: translateX(-50%) translateY(0); }
-}
-@keyframes spin { to { transform: rotate(360deg); } }
+───────────────────────────────────── */
+@keyframes fadeDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes fadeUp   { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes slideUpBanner { to { transform: translateX(-50%) translateY(0); } }
+@keyframes spin     { to { transform: rotate(360deg); } }
 
-/* ────────────────────────────────────────
+/* ─────────────────────────────────────
    RESPONSIVE
-──────────────────────────────────────── */
+───────────────────────────────────── */
+@media (max-width: 860px) {
+  .doc-layout { grid-template-columns: 1fr; padding: 36px 20px 80px; gap: 28px; }
+  .doc-sidebar { position: static; }
+  .toc-list { flex-direction: row; flex-wrap: wrap; gap: 4px; }
+  .toc-list li a { border-left: none; border-bottom: 2px solid transparent; }
+  .toc-list li a:hover, .toc-list li a.toc-active { border-left-color: transparent; border-bottom-color: var(--accent); }
+  .sidebar-info { display: none; }
+}
 @media (max-width: 768px) {
   .site-header { padding: 0 16px; }
-  .header-right { display: none; }
-  .header-divider { display: none; }
+  .header-right, .header-divider { display: none; }
   .nav-btn { padding: 6px 8px; font-size: 12px; }
   .nav-btn .nav-icon { display: none; }
-
   .hero-strip { padding: 36px 16px 40px; }
   .hero-stats { gap: 20px; }
-
   .page-body { padding: 28px 16px 80px; }
   .video-grid, .links-grid { grid-template-columns: 1fr; }
-
   .share-hero { padding: 32px 24px 24px; }
   .share-body { padding: 28px 24px; }
-
   .form-card-head, .form-body { padding-left: 18px; padding-right: 18px; }
   .feed-card-head, .suggestion-item { padding-left: 16px; padding-right: 16px; }
-
   .footer-inner { flex-direction: column; align-items: flex-start; }
   .topbar { display: none; }
+  .doc-hero { padding: 40px 16px 44px; }
+  .contact-card { padding: 24px 20px; }
 }
-
 @media (max-width: 480px) {
   .hero-inner { flex-direction: column; gap: 24px; }
   .hero-stats { width: 100%; }
@@ -864,334 +576,439 @@ body {
 </head>
 <body>
 
-<!-- TOP BAR -->
-<div class="topbar">
-  <span class="topbar-text">Escola Bíblica Dominical</span>
-  <span class="topbar-sep">·</span>
-  <span class="topbar-badge">Assembleia de Deus Maguari</span>
-</div>
+<!-- ══════════════════════════════════════
+     VIEW: MAIN APP
+══════════════════════════════════════ -->
+<div class="view active" id="view-main">
 
-<!-- HEADER -->
-<header class="site-header">
-  <div class="header-left">
-    <div class="header-logo">✝</div>
-    <div class="header-wordmark">
-      <strong>EBD Professores</strong>
-      <span>AD Maguari</span>
-    </div>
-    <div class="header-divider"></div>
-    <nav class="header-nav" role="tablist">
-      <button class="nav-btn active" onclick="switchTab('recursos')" data-tab="recursos" role="tab">
-        <span class="nav-icon">📖</span> Recursos
-      </button>
-      <button class="nav-btn" onclick="switchTab('compartilhar')" data-tab="compartilhar" role="tab">
-        <span class="nav-icon">🔗</span> Compartilhar
-      </button>
-      <button class="nav-btn" onclick="switchTab('sugestoes')" data-tab="sugestoes" role="tab">
-        <span class="nav-icon">💡</span> Sugestões
-      </button>
-    </nav>
+  <div class="topbar">
+    <span class="topbar-text">Escola Bíblica Dominical</span>
+    <span class="topbar-sep">·</span>
+    <span class="topbar-badge">Assembleia de Deus Maguari</span>
   </div>
-  <div class="header-right">
-    <span class="header-chip">2025 — 2.º Trimestre</span>
-  </div>
-</header>
 
-<!-- HERO -->
-<section class="hero-strip">
-  <div class="hero-inner">
-    <div>
-      <div class="hero-eyebrow">
-        <span class="hero-eyebrow-dot"></span>
-        Recursos pedagógicos e espirituais
+  <header class="site-header">
+    <div class="header-left">
+      <div class="header-logo">✝</div>
+      <div class="header-wordmark">
+        <strong>EBD Professores</strong>
+        <span>AD Maguari</span>
       </div>
-      <h1 class="hero-title">
-        <strong>Auxílio para</strong>
-        Professores
-      </h1>
-      <p class="hero-desc">
-        Uma plataforma centralizada com vídeos, materiais e uma comunidade ativa
-        para apoiar o ensino fiel da Palavra de Deus.
-      </p>
+      <div class="header-divider"></div>
+      <nav class="header-nav" role="tablist">
+        <button class="nav-btn active" onclick="switchTab('recursos')" data-tab="recursos" role="tab">
+          <span class="nav-icon">📖</span> Recursos
+        </button>
+        <button class="nav-btn" onclick="switchTab('compartilhar')" data-tab="compartilhar" role="tab">
+          <span class="nav-icon">🔗</span> Compartilhar
+        </button>
+        <button class="nav-btn" onclick="switchTab('sugestoes')" data-tab="sugestoes" role="tab">
+          <span class="nav-icon">💡</span> Sugestões
+        </button>
+      </nav>
     </div>
-    <div class="hero-stats">
+    <div class="header-right">
+      <span class="header-chip">2025 — 2.º Trimestre</span>
+    </div>
+  </header>
+
+  <section class="hero-strip">
+    <div class="hero-inner">
       <div>
-        <div class="hero-stat-value">4</div>
-        <div class="hero-stat-label">Aulas em vídeo</div>
+        <div class="hero-eyebrow"><span class="hero-eyebrow-dot"></span>Recursos pedagógicos e espirituais</div>
+        <h1 class="hero-title"><strong>Auxílio para</strong>Professores</h1>
+        <p class="hero-desc">Uma plataforma centralizada com vídeos, materiais e uma comunidade ativa para apoiar o ensino fiel da Palavra de Deus.</p>
       </div>
-      <div>
-        <div class="hero-stat-value">4</div>
-        <div class="hero-stat-label">Recursos online</div>
-      </div>
-      <div>
-        <div class="hero-stat-value">∞</div>
-        <div class="hero-stat-label">Sugestões da comunidade</div>
+      <div class="hero-stats">
+        <div><div class="hero-stat-value">4</div><div class="hero-stat-label">Aulas em vídeo</div></div>
+        <div><div class="hero-stat-value">4</div><div class="hero-stat-label">Recursos online</div></div>
+        <div><div class="hero-stat-value">∞</div><div class="hero-stat-label">Sugestões da comunidade</div></div>
       </div>
     </div>
+  </section>
+
+  <div class="page-body">
+
+    <!-- RECURSOS -->
+    <div class="tab-panel active" id="panel-recursos" role="tabpanel">
+      <section class="section">
+        <div class="section-head">
+          <div class="section-title">Vídeos Recomendados <span class="section-title-tag">4 aulas</span></div>
+        </div>
+        <div class="video-grid">
+          <div class="video-card">
+            <div class="video-card-top"><span class="video-card-label">Aula 1</span><span class="video-card-badge">Vídeo</span></div>
+            <div class="video-wrapper"><iframe src="https://www.youtube.com/embed/jYRTVIQopC4?si=JDIEkW50XKYPHIFo" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe></div>
+          </div>
+          <div class="video-card">
+            <div class="video-card-top"><span class="video-card-label">Aula 2</span><span class="video-card-badge">Vídeo</span></div>
+            <div class="video-wrapper"><iframe src="https://www.youtube.com/embed/UZHvUxyRZSA?si=DYrYWD5bZzafhfh-" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe></div>
+          </div>
+          <div class="video-card">
+            <div class="video-card-top"><span class="video-card-label">Aula 3</span><span class="video-card-badge">Vídeo</span></div>
+            <div class="video-wrapper"><iframe src="https://www.youtube.com/embed/NrUTnPzJj5A?si=SoFYCgPMNgf2AwjV" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe></div>
+          </div>
+          <div class="video-card">
+            <div class="video-card-top"><span class="video-card-label">Aula 4</span><span class="video-card-badge">Vídeo</span></div>
+            <div class="video-wrapper"><iframe src="https://www.youtube.com/embed/NjHjBPzbJGQ?si=py1JVtPkqcfLqJSz" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-head">
+          <div class="section-title">Recursos Online <span class="section-title-tag">4 links</span></div>
+        </div>
+        <ul class="links-grid">
+          <li class="link-card"><a href="https://adaliahelena.blogspot.com/" target="_blank" rel="noopener"><div class="link-icon-box">📖</div><div class="link-text"><strong>Blog Adalia Helena</strong><small>Reflexões e materiais para EBD</small></div><span class="link-arrow">↗</span></a></li>
+          <li class="link-card"><a href="https://www.pecadorconfesso.com/" target="_blank" rel="noopener"><div class="link-icon-box">🙏</div><div class="link-text"><strong>Pecador Confesso</strong><small>Artigos e estudos bíblicos</small></div><span class="link-arrow">↗</span></a></li>
+          <li class="link-card"><a href="https://escolabiblicadominical.org/licoes-biblicas-adultos/" target="_blank" rel="noopener"><div class="link-icon-box">📚</div><div class="link-text"><strong>Lições Bíblicas</strong><small>Escola Bíblica Dominical</small></div><span class="link-arrow">↗</span></a></li>
+          <li class="link-card"><a href="https://pin.it/1IYj0NwGk" target="_blank" rel="noopener"><div class="link-icon-box">📌</div><div class="link-text"><strong>Pinterest</strong><small>Materiais visuais e ideias</small></div><span class="link-arrow">↗</span></a></li>
+        </ul>
+      </section>
+    </div>
+
+    <!-- COMPARTILHAR -->
+    <div class="tab-panel" id="panel-compartilhar" role="tabpanel">
+      <div class="share-layout">
+        <div class="share-card">
+          <div class="share-hero">
+            <div class="share-hero-icon">✦</div>
+            <h2>Compartilhe esta página</h2>
+            <p>Escaneie o QR Code e envie para outros professores</p>
+          </div>
+          <div class="share-body">
+            <div id="qrcode"></div>
+            <div class="share-url-box">
+              <span class="share-url-text" id="page-url"></span>
+              <button class="copy-btn" onclick="copyURL()">Copiar</button>
+            </div>
+            <p class="share-credit">Desenvolvido por <strong>Bruno dos Santos</strong></p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SUGESTÕES -->
+    <div class="tab-panel" id="panel-sugestoes" role="tabpanel">
+      <div class="suggestions-layout">
+        <div class="form-card">
+          <div class="form-card-head">
+            <h3>Enviar sugestão</h3>
+            <p>Compartilhe recursos ou ideias com outros professores.</p>
+          </div>
+          <div class="form-body">
+            <div class="field">
+              <label for="sug-nome">Nome <span class="field-hint">(opcional)</span></label>
+              <input type="text" id="sug-nome" placeholder="Seu nome" maxlength="60">
+            </div>
+            <div class="field">
+              <label for="sug-categoria">Categoria</label>
+              <div class="select-wrap">
+                <select id="sug-categoria">
+                  <option value="">Selecione…</option>
+                  <option value="Video">Vídeo</option>
+                  <option value="Artigo">Artigo / Blog</option>
+                  <option value="Livro">Livro</option>
+                  <option value="Dinâmica">Dinâmica de Aula</option>
+                  <option value="Ferramenta">Ferramenta ou App</option>
+                  <option value="Outro">Outro</option>
+                </select>
+              </div>
+            </div>
+            <div class="field">
+              <label for="sug-texto">Sugestão</label>
+              <textarea id="sug-texto" placeholder="Descreva o recurso ou ideia…" maxlength="500"></textarea>
+              <div class="char-counter" id="char-counter">0 / 500</div>
+            </div>
+            <div class="field">
+              <label for="sug-link">Link <span class="field-hint">(opcional)</span></label>
+              <input type="url" id="sug-link" placeholder="https://exemplo.com">
+            </div>
+            <button class="submit-btn" id="submit-btn" onclick="enviarSugestao()">Enviar sugestão</button>
+            <div class="toast" id="form-toast"></div>
+          </div>
+        </div>
+        <div class="feed-card">
+          <div class="feed-card-head">
+            <h3>Sugestões da comunidade <span class="feed-count" id="feed-count">—</span></h3>
+            <button class="refresh-btn" onclick="carregarSugestoes()"><span>↻</span> Atualizar</button>
+          </div>
+          <div class="feed-list" id="feed-content">
+            <div class="feed-loading"><span class="spinner"></span>Carregando…</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /page-body -->
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-left">
+        <div class="footer-logo">✝</div>
+        <span class="footer-copy">© 2025 · Escola Bíblica Dominical · Desenvolvido por <strong>Bruno dos Santos</strong></span>
+      </div>
+      <div class="footer-right">
+        <a class="footer-link" onclick="showView('view-privacy')" style="cursor:pointer;">Política de Privacidade</a>
+        &nbsp;·&nbsp; AD Maguari
+      </div>
+    </div>
+  </footer>
+
+</div><!-- /view-main -->
+
+
+<!-- ══════════════════════════════════════
+     VIEW: POLÍTICA DE PRIVACIDADE
+══════════════════════════════════════ -->
+<div class="view" id="view-privacy">
+
+  <div class="topbar">
+    <span class="topbar-text">Escola Bíblica Dominical</span>
+    <span class="topbar-sep">·</span>
+    <span class="topbar-badge">Assembleia de Deus Maguari</span>
   </div>
-</section>
 
-<!-- MAIN -->
-<div class="page-body">
-
-  <!-- ── RECURSOS ── -->
-  <div class="tab-panel active" id="panel-recursos" role="tabpanel">
-
-    <section class="section">
-      <div class="section-head">
-        <div class="section-title">
-          Vídeos Recomendados
-          <span class="section-title-tag">4 aulas</span>
-        </div>
+  <header class="site-header">
+    <div class="header-left">
+      <div class="header-logo">✝</div>
+      <div class="header-wordmark">
+        <strong>EBD Professores</strong>
+        <span>AD Maguari</span>
       </div>
-      <div class="video-grid">
+      <div class="header-divider"></div>
+      <span style="font-size:13px;color:var(--text-muted);font-weight:500;">Política de Privacidade</span>
+    </div>
+    <button class="pp-back" onclick="showView('view-main')">← Voltar</button>
+  </header>
 
-        <div class="video-card">
-          <div class="video-card-top">
-            <span class="video-card-label">Aula 1</span>
-            <span class="video-card-badge">Vídeo</span>
-          </div>
-          <div class="video-wrapper">
-            <iframe src="https://www.youtube.com/embed/jYRTVIQopC4?si=JDIEkW50XKYPHIFo"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowfullscreen loading="lazy"></iframe>
-          </div>
-        </div>
-
-        <div class="video-card">
-          <div class="video-card-top">
-            <span class="video-card-label">Aula 2</span>
-            <span class="video-card-badge">Vídeo</span>
-          </div>
-          <div class="video-wrapper">
-            <iframe src="https://www.youtube.com/embed/UZHvUxyRZSA?si=DYrYWD5bZzafhfh-"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowfullscreen loading="lazy"></iframe>
-          </div>
-        </div>
-
-        <div class="video-card">
-          <div class="video-card-top">
-            <span class="video-card-label">Aula 3</span>
-            <span class="video-card-badge">Vídeo</span>
-          </div>
-          <div class="video-wrapper">
-            <iframe src="https://www.youtube.com/embed/NrUTnPzJj5A?si=SoFYCgPMNgf2AwjV"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowfullscreen loading="lazy"></iframe>
-          </div>
-        </div>
-
-        <div class="video-card">
-          <div class="video-card-top">
-            <span class="video-card-label">Aula 4</span>
-            <span class="video-card-badge">Vídeo</span>
-          </div>
-          <div class="video-wrapper">
-            <iframe src="https://www.youtube.com/embed/NjHjBPzbJGQ?si=py1JVtPkqcfLqJSz"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowfullscreen loading="lazy"></iframe>
-          </div>
-        </div>
-
+  <section class="doc-hero">
+    <div class="doc-hero-inner">
+      <div class="doc-eyebrow"><span class="doc-eyebrow-dot"></span>Documento legal</div>
+      <h1><small>EBD Professores · AD Maguari</small>Política de Privacidade</h1>
+      <div class="doc-meta">
+        <div class="doc-meta-item">Versão <span>1.0</span></div>
+        <span class="doc-meta-sep">·</span>
+        <div class="doc-meta-item">Vigência desde <span>01 jan. 2025</span></div>
+        <span class="doc-meta-sep">·</span>
+        <div class="doc-meta-item">Atualização <span>maio 2025</span></div>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <section class="section">
-      <div class="section-head">
-        <div class="section-title">
-          Recursos Online
-          <span class="section-title-tag">4 links</span>
-        </div>
-      </div>
-      <ul class="links-grid">
+  <div class="doc-layout">
 
-        <li class="link-card">
-          <a href="https://adaliahelena.blogspot.com/" target="_blank" rel="noopener">
-            <div class="link-icon-box">📖</div>
-            <div class="link-text">
-              <strong>Blog Adalia Helena</strong>
-              <small>Reflexões e materiais para EBD</small>
-            </div>
-            <span class="link-arrow">↗</span>
-          </a>
-        </li>
-
-        <li class="link-card">
-          <a href="https://www.pecadorconfesso.com/" target="_blank" rel="noopener">
-            <div class="link-icon-box">🙏</div>
-            <div class="link-text">
-              <strong>Pecador Confesso</strong>
-              <small>Artigos e estudos bíblicos</small>
-            </div>
-            <span class="link-arrow">↗</span>
-          </a>
-        </li>
-
-        <li class="link-card">
-          <a href="https://escolabiblicadominical.org/licoes-biblicas-adultos/" target="_blank" rel="noopener">
-            <div class="link-icon-box">📚</div>
-            <div class="link-text">
-              <strong>Lições Bíblicas</strong>
-              <small>Escola Bíblica Dominical</small>
-            </div>
-            <span class="link-arrow">↗</span>
-          </a>
-        </li>
-
-        <li class="link-card">
-          <a href="https://pin.it/1IYj0NwGk" target="_blank" rel="noopener">
-            <div class="link-icon-box">📌</div>
-            <div class="link-text">
-              <strong>Pinterest</strong>
-              <small>Materiais visuais e ideias</small>
-            </div>
-            <span class="link-arrow">↗</span>
-          </a>
-        </li>
-
+    <!-- Sidebar -->
+    <aside class="doc-sidebar">
+      <div class="sidebar-label">Nesta página</div>
+      <ul class="toc-list">
+        <li><a onclick="scrollToSection('pp1')" class="toc-active">1. Quem somos</a></li>
+        <li><a onclick="scrollToSection('pp2')">2. Dados coletados</a></li>
+        <li><a onclick="scrollToSection('pp3')">3. Finalidade</a></li>
+        <li><a onclick="scrollToSection('pp4')">4. Cookies</a></li>
+        <li><a onclick="scrollToSection('pp5')">5. Compartilhamento</a></li>
+        <li><a onclick="scrollToSection('pp6')">6. Armazenamento</a></li>
+        <li><a onclick="scrollToSection('pp7')">7. Seus direitos</a></li>
+        <li><a onclick="scrollToSection('pp8')">8. Menores</a></li>
+        <li><a onclick="scrollToSection('pp9')">9. Alterações</a></li>
+        <li><a onclick="scrollToSection('pp10')">10. Contato</a></li>
       </ul>
-    </section>
+      <div class="sidebar-sep"></div>
+      <div class="sidebar-info">Esta política é regida pela <strong>Lei Geral de Proteção de Dados</strong> (Lei nº 13.709/2018 — LGPD).</div>
+    </aside>
 
-  </div>
+    <!-- Content -->
+    <main class="doc-content">
 
-  <!-- ── COMPARTILHAR ── -->
-  <div class="tab-panel" id="panel-compartilhar" role="tabpanel">
-    <div class="share-layout">
-      <div class="share-card">
-        <div class="share-hero">
-          <div class="share-hero-icon">✦</div>
-          <h2>Compartilhe esta página</h2>
-          <p>Escaneie o QR Code e envie para outros professores</p>
-        </div>
-        <div class="share-body">
-          <div id="qrcode"></div>
-          <div class="share-url-box">
-            <span class="share-url-text" id="page-url"></span>
-            <button class="copy-btn" onclick="copyURL()">Copiar</button>
-          </div>
-          <p class="share-credit">Desenvolvido por <strong>Bruno dos Santos</strong></p>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ── SUGESTÕES ── -->
-  <div class="tab-panel" id="panel-sugestoes" role="tabpanel">
-    <div class="suggestions-layout">
-
-      <div class="form-card">
-        <div class="form-card-head">
-          <h3>Enviar sugestão</h3>
-          <p>Compartilhe recursos ou ideias com outros professores.</p>
-        </div>
-        <div class="form-body">
-
-          <div class="field">
-            <label for="sug-nome">Nome <span class="field-hint">(opcional)</span></label>
-            <input type="text" id="sug-nome" placeholder="Seu nome" maxlength="60">
-          </div>
-
-          <div class="field">
-            <label for="sug-categoria">Categoria</label>
-            <div class="select-wrap">
-              <select id="sug-categoria">
-                <option value="">Selecione…</option>
-                <option value="Video">Vídeo</option>
-                <option value="Artigo">Artigo / Blog</option>
-                <option value="Livro">Livro</option>
-                <option value="Dinâmica">Dinâmica de Aula</option>
-                <option value="Ferramenta">Ferramenta ou App</option>
-                <option value="Outro">Outro</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="field">
-            <label for="sug-texto">Sugestão</label>
-            <textarea id="sug-texto" placeholder="Descreva o recurso ou ideia…" maxlength="500"></textarea>
-            <div class="char-counter" id="char-counter">0 / 500</div>
-          </div>
-
-          <div class="field">
-            <label for="sug-link">Link <span class="field-hint">(opcional)</span></label>
-            <input type="url" id="sug-link" placeholder="https://exemplo.com">
-          </div>
-
-          <button class="submit-btn" id="submit-btn" onclick="enviarSugestao()">
-            Enviar sugestão
-          </button>
-          <div class="toast" id="form-toast"></div>
+      <div class="intro-notice">
+        <span class="intro-notice-icon">📋</span>
+        <div>
+          <p>Este documento descreve como a plataforma <strong>EBD Professores da Assembleia de Deus Maguari</strong> coleta, utiliza, armazena e protege as informações dos seus usuários. Ao acessar e utilizar este site, você concorda com os termos descritos abaixo.</p>
         </div>
       </div>
 
-      <div class="feed-card">
-        <div class="feed-card-head">
-          <h3>
-            Sugestões da comunidade
-            <span class="feed-count" id="feed-count">—</span>
-          </h3>
-          <button class="refresh-btn" onclick="carregarSugestoes()">
-            <span>↻</span> Atualizar
-          </button>
+      <!-- 1 -->
+      <section class="pp-section" id="pp1">
+        <div class="pp-section-num">Seção 01</div>
+        <h2>Quem somos</h2>
+        <p>Esta plataforma é mantida pela <strong>Escola Bíblica Dominical da Assembleia de Deus Maguari</strong>, uma iniciativa interna sem fins lucrativos voltada ao suporte pedagógico e espiritual dos professores da EBD.</p>
+        <p>O desenvolvimento e a manutenção técnica são de responsabilidade de <strong>Bruno dos Santos</strong>, membro da congregação, que atua como responsável pelo tratamento dos dados (controlador, nos termos da LGPD).</p>
+        <div class="info-box note"><span class="info-box-icon">ℹ️</span><span>Esta plataforma <strong>não possui fins comerciais</strong>. Não há coleta de dados para publicidade, marketing de terceiros ou revenda de informações.</span></div>
+      </section>
+      <div class="pp-sep"></div>
+
+      <!-- 2 -->
+      <section class="pp-section" id="pp2">
+        <div class="pp-section-num">Seção 02</div>
+        <h2>Dados que coletamos</h2>
+        <p>A plataforma coleta apenas as informações estritamente necessárias para o seu funcionamento:</p>
+        <table class="pp-table">
+          <thead><tr><th>Dado</th><th>Tipo</th><th>Obrig.</th><th>Origem</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Nome</strong></td><td>Texto livre</td><td>Opcional</td><td>Formulário de sugestões</td></tr>
+            <tr><td><strong>Categoria</strong></td><td>Seleção</td><td>Opcional</td><td>Formulário de sugestões</td></tr>
+            <tr><td><strong>Texto da sugestão</strong></td><td>Texto livre</td><td>Obrigatório</td><td>Formulário de sugestões</td></tr>
+            <tr><td><strong>Link externo</strong></td><td>URL</td><td>Opcional</td><td>Formulário de sugestões</td></tr>
+            <tr><td><strong>Data/hora de envio</strong></td><td>Timestamp</td><td>Automático</td><td>Sistema</td></tr>
+            <tr><td><strong>Preferência de cookies</strong></td><td>Booleano</td><td>Automático</td><td>Banner de consentimento</td></tr>
+          </tbody>
+        </table>
+        <div class="info-box ok"><span class="info-box-icon">✅</span><span>Não coletamos e-mail, telefone, CPF, endereço físico, dados de pagamento ou qualquer dado sensível.</span></div>
+      </section>
+      <div class="pp-sep"></div>
+
+      <!-- 3 -->
+      <section class="pp-section" id="pp3">
+        <div class="pp-section-num">Seção 03</div>
+        <h2>Finalidade do uso dos dados</h2>
+        <p>Os dados coletados são utilizados exclusivamente para:</p>
+        <ul>
+          <li>Exibir as sugestões enviadas para outros professores da EBD, promovendo a troca de recursos e experiências.</li>
+          <li>Identificar o autor da sugestão de forma amigável (nome, quando fornecido), conferindo crédito ao contribuinte.</li>
+          <li>Manter o registro cronológico das contribuições para facilitar a navegação.</li>
+          <li>Lembrar a preferência de consentimento de cookies, evitando exibição repetida do aviso.</li>
+          <li>Garantir a segurança e integridade do sistema, prevenindo abusos e conteúdo inadequado.</li>
+        </ul>
+        <div class="info-box warn"><span class="info-box-icon">⚠️</span><span>As sugestões enviadas <strong>ficam visíveis publicamente</strong> para todos os usuários da plataforma. Não envie informações pessoais sensíveis no campo de texto.</span></div>
+      </section>
+      <div class="pp-sep"></div>
+
+      <!-- 4 -->
+      <section class="pp-section" id="pp4">
+        <div class="pp-section-num">Seção 04</div>
+        <h2>Cookies e armazenamento local</h2>
+        <p>Este site utiliza <strong>um único cookie primário</strong>, de natureza funcional, sem qualquer finalidade rastreadora ou publicitária:</p>
+        <ul>
+          <li><strong>privacyAccepted</strong> — armazenado após clicar em "Entendido". Duração de 365 dias. Serve apenas para não exibir o aviso novamente.</li>
+        </ul>
+        <div class="info-box note"><span class="info-box-icon">🍪</span><span>Você pode excluir ou bloquear cookies pelas configurações do seu navegador. Isso não afeta nenhuma funcionalidade essencial do site.</span></div>
+        <p>Os vídeos exibidos são incorporados do <strong>YouTube (Google LLC)</strong>. Ao reproduzir um vídeo, você está sujeito também à Política de Privacidade do Google.</p>
+      </section>
+      <div class="pp-sep"></div>
+
+      <!-- 5 -->
+      <section class="pp-section" id="pp5">
+        <div class="pp-section-num">Seção 05</div>
+        <h2>Compartilhamento de dados</h2>
+        <p>Os dados <strong>não são vendidos, cedidos ou compartilhados com terceiros para fins comerciais</strong>. O único compartilhamento técnico existente é com os serviços de infraestrutura:</p>
+        <ul>
+          <li><strong>Supabase Inc.</strong> — banco de dados onde as sugestões são armazenadas. Servidores na UE (Frankfurt) com criptografia TLS e conformidade com GDPR/LGPD.</li>
+          <li><strong>Google Fonts</strong> — carregamento das fontes tipográficas. O Google pode registrar o IP do usuário nesta requisição.</li>
+          <li><strong>jsDelivr CDN</strong> — entrega de bibliotecas JavaScript. Não tem acesso a dados pessoais inseridos pelo usuário.</li>
+        </ul>
+      </section>
+      <div class="pp-sep"></div>
+
+      <!-- 6 -->
+      <section class="pp-section" id="pp6">
+        <div class="pp-section-num">Seção 06</div>
+        <h2>Armazenamento e segurança</h2>
+        <p>As sugestões são armazenadas no banco de dados <strong>Supabase</strong> pelo prazo necessário para o funcionamento da plataforma. Medidas técnicas adotadas:</p>
+        <ol>
+          <li>Comunicação cifrada via HTTPS/TLS em todas as conexões com o servidor.</li>
+          <li>Chaves de acesso ao banco de dados mantidas no servidor, sem exposição ao usuário final.</li>
+          <li>Acesso ao painel administrativo restrito ao responsável técnico, protegido por autenticação.</li>
+          <li>Banco de dados configurado com permissões mínimas (Row Level Security do Supabase).</li>
+        </ol>
+        <div class="info-box note"><span class="info-box-icon">🔒</span><span>Em caso de incidente de segurança envolvendo dados pessoais, os afetados serão notificados conforme previsto na LGPD.</span></div>
+      </section>
+      <div class="pp-sep"></div>
+
+      <!-- 7 -->
+      <section class="pp-section" id="pp7">
+        <div class="pp-section-num">Seção 07</div>
+        <h2>Seus direitos</h2>
+        <p>Conforme a <strong>LGPD (Lei nº 13.709/2018)</strong>, você tem direito a:</p>
+        <ul>
+          <li><strong>Acesso:</strong> solicitar cópia dos dados que temos sobre você.</li>
+          <li><strong>Correção:</strong> solicitar correção de dados incompletos, inexatos ou desatualizados.</li>
+          <li><strong>Exclusão:</strong> solicitar remoção de dados fornecidos com seu consentimento.</li>
+          <li><strong>Portabilidade:</strong> solicitar seus dados em formato estruturado e legível por máquina.</li>
+          <li><strong>Revogação:</strong> retirar o consentimento dado a qualquer momento.</li>
+          <li><strong>Oposição:</strong> opor-se ao tratamento de dados realizado com bases distintas do consentimento.</li>
+        </ul>
+      </section>
+      <div class="pp-sep"></div>
+
+      <!-- 8 -->
+      <section class="pp-section" id="pp8">
+        <div class="pp-section-num">Seção 08</div>
+        <h2>Menores de idade</h2>
+        <p>Esta plataforma é destinada ao uso de <strong>professores adultos</strong> da Escola Bíblica Dominical. Não coletamos intencionalmente dados pessoais de menores de 18 anos.</p>
+        <p>Caso seja identificado que dados de menor foram coletados sem consentimento dos responsáveis, procederemos com a exclusão imediata das informações, conforme art. 14 da LGPD.</p>
+      </section>
+      <div class="pp-sep"></div>
+
+      <!-- 9 -->
+      <section class="pp-section" id="pp9">
+        <div class="pp-section-num">Seção 09</div>
+        <h2>Alterações nesta política</h2>
+        <p>Esta Política de Privacidade pode ser atualizada periodicamente para refletir melhorias na plataforma, novas exigências legais ou mudanças nas práticas de tratamento de dados.</p>
+        <p>Em caso de alterações relevantes, a data de "Atualização" no topo deste documento será modificada. O uso continuado da plataforma após publicação de alterações constitui aceitação das novas condições.</p>
+      </section>
+      <div class="pp-sep"></div>
+
+      <!-- 10 -->
+      <section class="pp-section" id="pp10">
+        <div class="pp-section-num">Seção 10</div>
+        <h2>Contato e encarregado de dados</h2>
+        <p>Para exercer seus direitos ou esclarecer dúvidas sobre privacidade, entre em contato com o responsável técnico. Respondemos em até <strong>15 dias úteis</strong>.</p>
+        <div class="contact-card">
+          <div class="contact-card-inner">
+            <h3>Fale conosco</h3>
+            <p>Nosso encarregado de dados responderá sua solicitação em até 15 dias úteis, conforme prazo previsto na LGPD.</p>
+            <div class="contact-row"><span>👤</span><span>Responsável: <strong>Bruno dos Santos</strong> — Desenvolvedor & Encarregado de Dados</span></div>
+            <div class="contact-row"><span>🏛️</span><span>Organização: <strong>Assembleia de Deus Maguari — EBD</strong></span></div>
+          </div>
         </div>
-        <div class="feed-list" id="feed-content">
-          <div class="feed-loading"><span class="spinner"></span>Carregando…</div>
-        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-left">
+        <div class="footer-logo">✝</div>
+        <span class="footer-copy">© 2025 · Escola Bíblica Dominical · Desenvolvido por <strong>Bruno dos Santos</strong></span>
       </div>
-
+      <div class="footer-right">
+        <a class="footer-link" onclick="showView('view-main')" style="cursor:pointer;">← Voltar ao início</a>
+        &nbsp;·&nbsp; AD Maguari
+      </div>
     </div>
-  </div>
+  </footer>
 
-</div><!-- /page-body -->
+</div><!-- /view-privacy -->
 
-<!-- FOOTER -->
-<footer class="site-footer">
-  <div class="footer-inner">
-    <div class="footer-left">
-      <div class="footer-logo">✝</div>
-      <span class="footer-copy">
-        © 2025 · Escola Bíblica Dominical ·
-        Desenvolvido por <strong>Bruno dos Santos</strong>
-      </span>
-    </div>
-    <div class="footer-right">AD Maguari · Todos os direitos reservados</div>
-  </div>
-</footer>
 
 <!-- PRIVACY BANNER -->
 <div id="privacy-banner">
-  <p>
-    Este site usa cookies para melhorar sua experiência. 
-    Ao continuar, você concorda com nossa 
-   <a>
-    Este site usa cookies para melhorar sua experiência. 
-    Ao continuar, você concorda com nossa 
-    <a 
-      href="https://ebdadmaguari.github.io/AUXILIO-PARA-PROFESSORES-EBD/politica-de-privacidade.html" 
-      target="_blank"
-    >
-      Política de Privacidade
-    </a>.
-  </p>
-
-  <button class="btn-accept" onclick="aceitarPrivacidade()">
-    Entendido
-  </button>
-</div>" 
-      target="_blank"
-    >
-      Política de Privacidade
-    </a>.
-  </p>
-
-  <button class="btn-accept" onclick="aceitarPrivacidade()">
-    Entendido
-  </button>
+  <p>Este site usa cookies para melhorar sua experiência. Ao continuar, você concorda com nossa <a onclick="showView('view-privacy')" style="cursor:pointer;">Política de Privacidade</a>.</p>
+  <button class="btn-accept" onclick="aceitarPrivacidade()">Entendido</button>
 </div>
 
-<!-- SCRIPTS -->
+
+<!-- ══════════════════════════════════════
+     SCRIPTS
+══════════════════════════════════════ -->
 <script>
+/* ── View router ── */
+function showView(id) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+/* ── ToC scroll (privacy page) ── */
+function scrollToSection(id) {
+  const el = document.getElementById(id);
+  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  document.querySelectorAll('.toc-list a').forEach(a => a.classList.remove('toc-active'));
+  event.target.classList.add('toc-active');
+}
+
 /* ── Supabase ── */
 let supabase = null;
 function initSupabase() {
@@ -1199,11 +1016,10 @@ function initSupabase() {
   catch(e) { console.warn('Supabase não iniciado.', e); }
 }
 
-/* ── Init ── */
+/* ── DOMContentLoaded ── */
 document.addEventListener('DOMContentLoaded', () => {
   initSupabase();
 
-  // QR Code
   const url = window.location.href;
   document.getElementById('page-url').textContent = url;
   if (typeof QRCode !== 'undefined') {
@@ -1214,11 +1030,9 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Privacy
   if (getCookie('privacyAccepted') === 'true')
     document.getElementById('privacy-banner').style.display = 'none';
 
-  // Char counter
   const ta = document.getElementById('sug-texto');
   const cc = document.getElementById('char-counter');
   ta.addEventListener('input', () => {
@@ -1250,18 +1064,13 @@ function switchTab(tab) {
 async function carregarSugestoes() {
   const feed = document.getElementById('feed-content');
   feed.innerHTML = '<div class="feed-loading"><span class="spinner"></span>Carregando…</div>';
-
   if (!supabase) { feed.innerHTML = renderDemoSugestoes(); return; }
-
   try {
-    const { data, error } = await supabase
-      .from('sugestoes').select('*')
-      .order('created_at', { ascending: false }).limit(20);
+    const { data, error } = await supabase.from('sugestoes').select('*').order('created_at', { ascending: false }).limit(20);
     if (error) throw error;
     if (!data || !data.length) {
       feed.innerHTML = '<div class="feed-empty"><div class="feed-empty-icon">💬</div>Nenhuma sugestão ainda. Seja o primeiro!</div>';
-      document.getElementById('feed-count').textContent = '0';
-      return;
+      document.getElementById('feed-count').textContent = '0'; return;
     }
     document.getElementById('feed-count').textContent = data.length;
     feed.innerHTML = data.map(renderItem).join('');
@@ -1279,10 +1088,7 @@ function renderItem(s) {
   return `<div class="suggestion-item">
     <div class="sug-header">
       <div class="sug-avatar">${ini}</div>
-      <div class="sug-meta">
-        <div class="sug-name">${escHtml(s.nome || 'Anônimo')}</div>
-        <div class="sug-date">${data}</div>
-      </div>
+      <div class="sug-meta"><div class="sug-name">${escHtml(s.nome || 'Anônimo')}</div><div class="sug-date">${data}</div></div>
       ${tag}
     </div>
     <p class="sug-text">${escHtml(s.texto)}${link}</p>
@@ -1296,9 +1102,7 @@ function renderDemoSugestoes() {
     { nome:'Ana Ferreira', categoria:'Artigo',   texto:'Blog do Instituto Bíblico tem artigos sobre hermenêutica acessível para professores leigos.', link:'https://example.com' },
   ];
   const now = new Date().toISOString();
-  const banner = `<div style="margin:12px 16px;padding:10px 14px;background:#FFFBEB;border:1px solid #FDE68A;border-radius:8px;font-size:12px;color:#92400E;">
-    <strong>Modo demonstração</strong> — Configure o Supabase para ativar o banco de dados.
-  </div>`;
+  const banner = `<div style="margin:12px 16px;padding:10px 14px;background:#FFFBEB;border:1px solid #FDE68A;border-radius:8px;font-size:12px;color:#92400E;"><strong>Modo demonstração</strong> — Configure o Supabase para ativar o banco de dados.</div>`;
   document.getElementById('feed-count').textContent = demos.length;
   return banner + demos.map(d => renderItem({...d, created_at: now})).join('');
 }
@@ -1310,23 +1114,17 @@ async function enviarSugestao() {
   const texto     = document.getElementById('sug-texto').value.trim();
   const link      = document.getElementById('sug-link').value.trim();
   const btn       = document.getElementById('submit-btn');
-
   if (!texto) { showToast('error', 'Por favor, escreva sua sugestão.'); return; }
   if (texto.length < 10) { showToast('error', 'Sugestão muito curta. Mínimo de 10 caracteres.'); return; }
   if (link && !isURL(link)) { showToast('error', 'Link inválido. Verifique o formato.'); return; }
-
   btn.disabled = true; btn.textContent = 'Enviando…';
-
   if (!supabase) {
     await sleep(700);
     showToast('success', 'Sugestão recebida. Obrigado pela contribuição!');
     resetForm(); btn.disabled = false; btn.textContent = 'Enviar sugestão'; return;
   }
   try {
-    const { error } = await supabase.from('sugestoes').insert([{
-      nome: nome || null, categoria: categoria || null,
-      texto, link: link || null
-    }]);
+    const { error } = await supabase.from('sugestoes').insert([{ nome: nome||null, categoria: categoria||null, texto, link: link||null }]);
     if (error) throw error;
     showToast('success', 'Sugestão enviada com sucesso!');
     resetForm(); carregarSugestoes();
@@ -1340,10 +1138,8 @@ async function enviarSugestao() {
 function showToast(type, msg) {
   const t = document.getElementById('form-toast');
   t.textContent = msg; t.className = 'toast ' + type; t.style.display = 'block';
-  clearTimeout(t._t);
-  t._t = setTimeout(() => t.style.display = 'none', 5000);
+  clearTimeout(t._t); t._t = setTimeout(() => t.style.display = 'none', 5000);
 }
-
 function resetForm() {
   ['sug-nome','sug-texto','sug-link'].forEach(id => document.getElementById(id).value = '');
   document.getElementById('sug-categoria').value = '';
@@ -1351,9 +1147,7 @@ function resetForm() {
 }
 
 /* ── Utils ── */
-function escHtml(s) {
-  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-}
+function escHtml(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 function isURL(s) { try { new URL(s); return true; } catch { return false; } }
 function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
 
@@ -1364,12 +1158,8 @@ function aceitarPrivacidade() {
   el.style.opacity = '0'; el.style.transform = 'translateX(-50%) translateY(24px)';
   setTimeout(() => el.style.display = 'none', 320);
 }
-function setCookie(n,v,d) {
-  document.cookie = n+'='+v+'; expires='+new Date(Date.now()+d*864e5).toUTCString()+'; path=/';
-}
-function getCookie(n) {
-  return document.cookie.split('; ').reduce((a,c)=>{const[k,v]=c.split('=');return k===n?v:a},'');
-}
+function setCookie(n,v,d) { document.cookie = n+'='+v+'; expires='+new Date(Date.now()+d*864e5).toUTCString()+'; path=/'; }
+function getCookie(n) { return document.cookie.split('; ').reduce((a,c)=>{ const[k,v]=c.split('='); return k===n?v:a; },''); }
 </script>
 </body>
 </html>
